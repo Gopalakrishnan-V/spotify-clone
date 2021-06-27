@@ -27,10 +27,10 @@ const ItemType = {
   TRACK: 'TRACK',
 };
 
-const AlbumScreen = props => {
+const PlaylistScreen = props => {
   const {route, navigation} = props;
-  const albumId = route?.params?.id ?? '2kPeYyo9wjtGrpSYJ9LDNo';
-  const [album, setAlbum] = useState(null);
+  const playlistId = route?.params?.id ?? '37i9dQZF1E39CR5c1DGceb';
+  const [playlist, setPlaylist] = useState(null);
   const [headerHeight, setHeaderHeight] = useState(10);
   const [dominantColor, setDominantColor] = useState(null);
   const tabBarHeight = useBottomTabBarHeight();
@@ -55,26 +55,27 @@ const AlbumScreen = props => {
   useEffect(() => {
     (async () => {
       try {
-        const res = await SpotifyClient.get(`v1/albums/${albumId}?market=IN`);
-        setAlbum(res.data);
+        const res = await SpotifyClient.get(
+          `v1/playlists/${playlistId}?market=IN`,
+        );
+        setPlaylist(res.data);
         navigation.setOptions({title: res.data.name});
         const artwork = res.data?.images?.[0]?.url;
-        setDominantColor(await ColorHelper.getDominantColor(artwork));
+        setDominantColor(
+          await ColorHelper.getDominantColor(artwork),
+          '#000000',
+        );
       } catch (e) {}
     })();
-  }, [albumId, navigation]);
+  }, [navigation, playlistId]);
 
   useEffect(() => {
     setBottomTabBarHeight(tabBarHeight);
   }, [setBottomTabBarHeight, tabBarHeight]);
 
-  const handleBackPress = useCallback(() => {
-    navigation.goBack();
-  }, [navigation]);
-
-  const handleShufflePress = useCallback(() => {
-    PlayerHelper.add(SpotifyHelper.getTracksFromAlbum(album));
-  }, [album]);
+  const handlePlayPress = useCallback(() => {
+    PlayerHelper.add(SpotifyHelper.getTracksFromPlaylist(playlist));
+  }, [playlist]);
 
   const handleTrackPress = useCallback(
     item => async () => {
@@ -84,33 +85,36 @@ const AlbumScreen = props => {
         albumName: album.name,
       });
     },
-    [album],
+    [],
   );
 
-  const renderItem = useCallback(
-    ({item, index}) => {
-      switch (item.type) {
-        case ItemType.STICKY_BUTTON: {
-          return (
-            <Button
-              text="Shuffle play"
-              style={styles.shuffleButton}
-              onPress={handleShufflePress}
-            />
-          );
-        }
-        case ItemType.TRACK: {
-          return <TrackItem data={item} onPress={handleTrackPress(item)} />;
-        }
-        default: {
-          return null;
-        }
+  const renderItem = ({item, index}) => {
+    switch (item.type) {
+      case ItemType.STICKY_BUTTON: {
+        return (
+          <Button
+            text="Play"
+            style={styles.playButton}
+            onPress={handlePlayPress}
+          />
+        );
       }
-    },
-    [handleShufflePress, handleTrackPress],
-  );
+      case ItemType.TRACK: {
+        return (
+          <TrackItem
+            data={item}
+            imageVisible
+            onPress={handleTrackPress(item)}
+          />
+        );
+      }
+      default: {
+        return null;
+      }
+    }
+  };
 
-  if (!album) {
+  if (!playlist) {
     return <Loader />;
   }
 
@@ -132,23 +136,28 @@ const AlbumScreen = props => {
     extrapolate: 'clamp',
   });
 
-  const {tracks} = album;
-  const trackItems = tracks.items.map(track => ({
+  const {name, images, owner, followers, tracks} = playlist;
+  const imageUrl = SpotifyHelper.getArtwork(images);
+  const subTitleParts = [];
+  if (owner) {
+    subTitleParts.push(`BY ${owner.display_name}`.toUpperCase());
+  }
+  if (followers) {
+    subTitleParts.push(`${followers.total} LIKES`);
+  }
+  const subTitle = subTitleParts.join(' • ');
+
+  const trackItems = tracks.items.map(({track}) => ({
     ...track,
     type: ItemType.TRACK,
   }));
   const listItems = [{type: ItemType.STICKY_BUTTON}, ...trackItems];
-  const subTitleParts = [];
-  subTitleParts.push(SpotifyHelper.getFirstArtistName(album.artists));
-  subTitleParts.push(SpotifyHelper.getYear(album.release_date));
-  const subTitle = subTitleParts.join(' • ');
-  const imageUrl = SpotifyHelper.getArtwork(album.images);
 
   return (
     <ScreenWrapper>
       <View style={styles.container}>
         <AnimatedHeader
-          title={album.name}
+          title={name}
           subTitle={subTitle}
           imageUrl={imageUrl}
           dominantColor={dominantColor}
@@ -161,10 +170,9 @@ const AlbumScreen = props => {
 
         <View style={styles.listWrapper}>
           <AnimatedTopBar
-            title={album.name}
+            title={playlist.name}
             animatedBgColor={animatedTopBarBgColor}
             animatedTitleOpacity={animatedTopBarTitleOpacity}
-            onBackPress={handleBackPress}
           />
           <FlatList
             data={listItems}
@@ -187,7 +195,7 @@ const AlbumScreen = props => {
   );
 };
 
-export default AlbumScreen;
+export default PlaylistScreen;
 
 const styles = StyleSheet.create({
   container: {
@@ -200,10 +208,8 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
   },
-  list: {
-    paddingBottom: 16,
-  },
-  shuffleButton: {
+  list: {},
+  playButton: {
     alignSelf: 'center',
     marginTop: 0,
     marginBottom: 24,
