@@ -36,7 +36,7 @@ const ItemType = {
 
 const AlbumScreen = props => {
   const {route, navigation} = props;
-  const albumId = route?.params?.id ?? '2kPeYyo9wjtGrpSYJ9LDNo';
+  const albumId = route?.params?.id ?? '31iCArxZjUNAz6UKfQO3W1';
   const [album, setAlbum] = useState(null);
   const [headerHeight, setHeaderHeight] = useState(10);
   const [dominantColor, setDominantColor] = useState(null);

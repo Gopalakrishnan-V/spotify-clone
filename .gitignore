@@ -60,3 +60,4 @@ buck-out/
 
 # Common
 .env
+package-lock.json
