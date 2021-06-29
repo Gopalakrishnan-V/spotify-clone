@@ -4,12 +4,12 @@ import {STATE_NONE} from 'react-native-track-player';
 
 import {PlayerStateContext} from '../../App';
 import BottomPlayer from '../BottomPlayer';
-import PlayerHelper from '../../helpers/PlayerHelper';
+import {getBottomPlayerHeight} from '../../helpers/playerHelpers';
 
 const ScreenWrapper = props => {
   const {playerState} = useContext(PlayerStateContext);
   const windowWidth = useWindowDimensions().width;
-  const bottomPlayerHeight = PlayerHelper.getBottomPlayerHeight(windowWidth);
+  const bottomPlayerHeight = getBottomPlayerHeight(windowWidth);
   const bottomPlayerVisible = playerState != null && playerState !== STATE_NONE;
 
   const wrapperStyle = [

@@ -14,9 +14,13 @@ import AnimatedHeader from '../../components/AnimatedHeader';
 import Loader from '../../components/Loader';
 import AnimatedTopBar from '../../components/AnimatedTopBar';
 import TrackItem from '../../components/TrackItem';
-import ColorHelper from '../../helpers/ColorHelper';
-import PlayerHelper from '../../helpers/PlayerHelper';
-import SpotifyHelper from '../../helpers/SpotifyHelper';
+import {getDominantColor} from '../../helpers/colorHelpers';
+import {addTracks} from '../../helpers/playerHelpers';
+import {
+  getTracksFromPlaylist,
+  getArtwork,
+  convertPlaylistTrackItemToTrackPlayerItem,
+} from '../../helpers/spotifyHelpers';
 import ScreenWrapper from '../../components/ScreenWrapper';
 import {BottomTabBarHeightContext} from '../../App';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
@@ -61,10 +65,7 @@ const PlaylistScreen = props => {
         setPlaylist(res.data);
         navigation.setOptions({title: res.data.name});
         const artwork = res.data?.images?.[0]?.url;
-        setDominantColor(
-          await ColorHelper.getDominantColor(artwork),
-          '#000000',
-        );
+        setDominantColor(await getDominantColor(artwork), '#000000');
       } catch (e) {}
     })();
   }, [navigation, playlistId]);
@@ -74,16 +75,12 @@ const PlaylistScreen = props => {
   }, [setBottomTabBarHeight, tabBarHeight]);
 
   const handlePlayPress = useCallback(() => {
-    PlayerHelper.add(SpotifyHelper.getTracksFromPlaylist(playlist));
+    addTracks(getTracksFromPlaylist(playlist));
   }, [playlist]);
 
   const handleTrackPress = useCallback(
     item => async () => {
-      PlayerHelper.add({
-        tracks: [item],
-        artwork: SpotifyHelper.getArtwork(album.images),
-        albumName: album.name,
-      });
+      addTracks([convertPlaylistTrackItemToTrackPlayerItem(item)]);
     },
     [],
   );
@@ -137,7 +134,7 @@ const PlaylistScreen = props => {
   });
 
   const {name, images, owner, followers, tracks} = playlist;
-  const imageUrl = SpotifyHelper.getArtwork(images);
+  const imageUrl = getArtwork(images);
   const subTitleParts = [];
   if (owner) {
     subTitleParts.push(`BY ${owner.display_name}`.toUpperCase());

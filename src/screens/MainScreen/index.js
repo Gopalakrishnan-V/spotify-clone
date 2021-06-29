@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, TouchableOpacity} from 'react-native';
+import {View, Text} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createStackNavigator} from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -10,7 +10,7 @@ import PlaylistScreen from '../PlaylistScreen';
 const HomeStack = createStackNavigator();
 function HomeStackScreen() {
   return (
-    <HomeStack.Navigator initialRouteName="Playlist">
+    <HomeStack.Navigator initialRouteName="Album">
       <HomeStack.Screen
         name="Album"
         component={AlbumScreen}

@@ -15,7 +15,7 @@ import TrackPlayer, {
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import LinearGradient from 'react-native-linear-gradient';
 import TrackSlider from '../../components/TrackSlider';
-import ColorHelper from '../../helpers/ColorHelper';
+import {getDominantColor, getGradientColors} from '../../helpers/colorHelpers';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 const events = [
@@ -45,7 +45,7 @@ const PlayerScreen = props => {
         const track = await TrackPlayer.getTrack(trackId);
         if (!mounted) return;
         setTrack(track);
-        const dominantColor = await ColorHelper.getDominantColor(
+        const dominantColor = await getDominantColor(
           track.artwork,
           COLOR_BLACK,
         );
@@ -65,7 +65,7 @@ const PlayerScreen = props => {
             const track = await TrackPlayer.getTrack(data.nextTrack);
             if (!mounted) return;
             setTrack(track);
-            const dominantColor = await ColorHelper.getDominantColor(
+            const dominantColor = await getDominantColor(
               track.artwork,
               COLOR_BLACK,
             );
@@ -115,7 +115,7 @@ const PlayerScreen = props => {
     height: windowWidth - 24 * 2,
   };
 
-  const colors = ColorHelper.getGradientColors(dominantColor);
+  const colors = getGradientColors(dominantColor);
 
   return (
     <LinearGradient colors={colors} style={containerStyle}>

@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import ColorHelper from '../../helpers/ColorHelper';
+import {getGradientColors} from '../../helpers/colorHelpers';
 
 export default function AnimatedHeader(props) {
   const insets = useSafeAreaInsets();
@@ -17,7 +17,7 @@ export default function AnimatedHeader(props) {
   const windowWidth = useWindowDimensions().width;
   const imageSize = windowWidth * 0.45;
   const artworkStyle = {width: imageSize, height: imageSize};
-  const colors = ColorHelper.getGradientColors(dominantColor);
+  const colors = getGradientColors(dominantColor);
 
   return (
     <Animated.View

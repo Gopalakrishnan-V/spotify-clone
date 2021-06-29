@@ -17,7 +17,7 @@ import TrackPlayer, {
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {getNavigationRef} from '../../../RootNavigation';
 import {BottomTabBarHeightContext} from '../../App';
-import PlayerHelper from '../../helpers/PlayerHelper';
+import {getBottomPlayerImageSize} from '../../helpers/playerHelpers';
 import TrackProgressView from '../TrackProgressView';
 
 const events = [
@@ -83,7 +83,7 @@ const BottomPlayer = props => {
     props.style,
     // {bottom: bottomTabBarHeight},
   ];
-  const imageSize = PlayerHelper.getBottomPlayerImageSize(windowWidth);
+  const imageSize = getBottomPlayerImageSize(windowWidth);
   const artworkStyle = {width: imageSize, height: imageSize};
 
   return (

@@ -3,7 +3,7 @@ import {View, Text, StyleSheet} from 'react-native';
 // import Slider from '@react-native-community/slider';
 import Slider from 'react-native-smooth-slider';
 import TrackPlayer from 'react-native-track-player';
-import DurationHelper from '../../helpers/DurationHelper';
+import {toHHMMSS} from '../../helpers/durationHelpers';
 
 class TrackSlider extends TrackPlayer.ProgressComponent {
   handleSlidingComplete = value => {
@@ -13,8 +13,8 @@ class TrackSlider extends TrackPlayer.ProgressComponent {
 
   render() {
     const {position, duration} = this.state;
-    const positionText = DurationHelper.toHHMMSS(position);
-    const durationText = DurationHelper.toHHMMSS(duration);
+    const positionText = toHHMMSS(position);
+    const durationText = toHHMMSS(duration);
 
     return (
       <View style={[styles.container, this.props.style]}>

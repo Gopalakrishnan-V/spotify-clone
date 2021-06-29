@@ -14,9 +14,16 @@ import AnimatedHeader from '../../components/AnimatedHeader';
 import Loader from '../../components/Loader';
 import AnimatedTopBar from '../../components/AnimatedTopBar';
 import TrackItem from '../../components/TrackItem';
-import ColorHelper from '../../helpers/ColorHelper';
-import PlayerHelper from '../../helpers/PlayerHelper';
-import SpotifyHelper from '../../helpers/SpotifyHelper';
+import {getDominantColor} from '../../helpers/colorHelpers';
+import {addTracks} from '../../helpers/playerHelpers';
+import {shuffleArray} from '../../helpers/commonHelpers';
+import {
+  getTracksFromAlbum,
+  getArtwork,
+  getFirstArtistName,
+  getYear,
+  convertAlbumTrackItemToTrackPlayerItem,
+} from '../../helpers/spotifyHelpers';
 import ScreenWrapper from '../../components/ScreenWrapper';
 import {BottomTabBarHeightContext} from '../../App';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
@@ -59,7 +66,7 @@ const AlbumScreen = props => {
         setAlbum(res.data);
         navigation.setOptions({title: res.data.name});
         const artwork = res.data?.images?.[0]?.url;
-        setDominantColor(await ColorHelper.getDominantColor(artwork));
+        setDominantColor(await getDominantColor(artwork));
       } catch (e) {}
     })();
   }, [albumId, navigation]);
@@ -73,22 +80,18 @@ const AlbumScreen = props => {
   }, [navigation]);
 
   const handleShufflePress = useCallback(() => {
-    PlayerHelper.add(SpotifyHelper.getTracksFromAlbum(album));
+    addTracks(shuffleArray(getTracksFromAlbum(album)));
   }, [album]);
 
   const handleTrackPress = useCallback(
     item => async () => {
-      PlayerHelper.add({
-        tracks: [item],
-        artwork: SpotifyHelper.getArtwork(album.images),
-        albumName: album.name,
-      });
+      addTracks([convertAlbumTrackItemToTrackPlayerItem(item, album)]);
     },
     [album],
   );
 
   const renderItem = useCallback(
-    ({item, index}) => {
+    ({item}) => {
       switch (item.type) {
         case ItemType.STICKY_BUTTON: {
           return (
@@ -139,10 +142,10 @@ const AlbumScreen = props => {
   }));
   const listItems = [{type: ItemType.STICKY_BUTTON}, ...trackItems];
   const subTitleParts = [];
-  subTitleParts.push(SpotifyHelper.getFirstArtistName(album.artists));
-  subTitleParts.push(SpotifyHelper.getYear(album.release_date));
+  subTitleParts.push(getFirstArtistName(album.artists));
+  subTitleParts.push(getYear(album.release_date));
   const subTitle = subTitleParts.join(' • ');
-  const imageUrl = SpotifyHelper.getArtwork(album.images);
+  const imageUrl = getArtwork(album.images);
 
   return (
     <ScreenWrapper>

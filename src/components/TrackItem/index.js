@@ -8,7 +8,7 @@ import {
   useWindowDimensions,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import SpotifyHelper from '../../helpers/SpotifyHelper';
+import {getArtwork} from '../../helpers/spotifyHelpers';
 
 export default function TrackItem(props) {
   const {data, imageVisible = false} = props;
@@ -17,7 +17,7 @@ export default function TrackItem(props) {
 
   const {name, artists, album} = data;
   const artistNames = (artists || []).map(artist => artist.name).join(', ');
-  const imageUrl = SpotifyHelper.getArtwork(album?.images);
+  const imageUrl = getArtwork(album?.images);
   const imageStyle = [styles.image, {width: imageSize, height: imageSize}];
 
   return (
