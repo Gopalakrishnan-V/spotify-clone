@@ -11,5 +11,5 @@ export const getDominantColor = async (imageUrl, fallbackColor = null) => {
 };
 
 export const getGradientColors = startColor => {
-  return [(startColor || COLOR_BLACK) + '77', COLOR_BLACK];
+  return [(startColor || COLOR_BLACK) + 'AA', COLOR_BLACK];
 };

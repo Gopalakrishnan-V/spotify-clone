@@ -14,6 +14,7 @@ import TrackPlayer, {
   STATE_PLAYING,
   STATE_NONE,
 } from 'react-native-track-player';
+import TextTicker from 'react-native-text-ticker';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {getNavigationRef} from '../../../RootNavigation';
 import {BottomTabBarHeightContext} from '../../App';
@@ -98,9 +99,16 @@ const BottomPlayer = props => {
           <Text style={styles.trackTitle} numberOfLines={1}>
             {title}
           </Text>
-          <Text style={styles.artistNames} numberOfLines={1}>
+          <TextTicker
+            style={styles.artistNames}
+            numberOfLines={1}
+            duration={5000}
+            loop
+            bounce
+            repeatSpacer={50}
+            marqueeDelay={1000}>
             {artist}
-          </Text>
+          </TextTicker>
         </View>
         <View style={styles.contentRight}>
           <Icon name="heart-outline" size={24} color="white" />

@@ -37,7 +37,10 @@ const Navigator = () => {
         <Stack.Screen
           name="Player"
           component={PlayerScreen}
-          options={{headerShown: false, gestureDirection: 'vertical'}}
+          options={{
+            headerShown: false,
+            gestureDirection: 'vertical',
+          }}
         />
       </Stack.Navigator>
     </NavigationContainer>

@@ -12,6 +12,7 @@ import TrackPlayer, {
   useTrackPlayerEvents,
   STATE_PLAYING,
 } from 'react-native-track-player';
+import TextTicker from 'react-native-text-ticker';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import LinearGradient from 'react-native-linear-gradient';
 import TrackSlider from '../../components/TrackSlider';
@@ -108,7 +109,7 @@ const PlayerScreen = props => {
     return null;
   }
 
-  const containerStyle = [styles.container, {paddingBottom: insets.bottom}];
+  const containerStyle = [styles.container, {paddingBottom: insets.bottom + 8}];
   const topBarStyle = [styles.topBar, {marginTop: insets.top}];
   const artworkStyle = {
     width: windowWidth - 24 * 2,
@@ -132,9 +133,16 @@ const PlayerScreen = props => {
           <Text style={styles.topBarSubtitle} numberOfLines={1}>
             PLAYING FROM ALBUM
           </Text>
-          <Text style={styles.topBarTitle} numberOfLines={1}>
+          <TextTicker
+            duration={5000}
+            loop
+            bounce
+            repeatSpacer={50}
+            marqueeDelay={1000}
+            style={styles.topBarTitle}
+            numberOfLines={1}>
             {track.albumName}
-          </Text>
+          </TextTicker>
         </TouchableOpacity>
         <Icon name="dots-vertical" size={24} color="#FFFFFF" />
       </View>
@@ -144,12 +152,27 @@ const PlayerScreen = props => {
       <View>
         <View style={styles.trackDetailsRow}>
           <View style={styles.trackDetailsRowContent}>
-            <Text style={styles.titleText} numberOfLines={1}>
+            <TextTicker
+              duration={5000}
+              loop
+              bounce
+              repeatSpacer={50}
+              marqueeDelay={1000}
+              style={styles.titleText}
+              numberOfLines={1}>
               {track.title}
-            </Text>
-            <Text style={styles.artistText} numberOfLines={1}>
+            </TextTicker>
+
+            <TextTicker
+              style={styles.artistText}
+              numberOfLines={1}
+              duration={5000}
+              loop
+              bounce
+              repeatSpacer={50}
+              marqueeDelay={1000}>
               {track.artist}
-            </Text>
+            </TextTicker>
           </View>
           <Icon name="heart-outline" size={24} color="white" />
         </View>

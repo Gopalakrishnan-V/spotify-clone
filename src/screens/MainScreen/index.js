@@ -1,43 +1,36 @@
 import React from 'react';
-import {View, Text} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createStackNavigator} from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
+import HomeScreen from '../HomeScreen';
+import SearchScreen from '../SearchScreen';
+import MyLibraryScreen from '../MyLibraryScreen';
 import AlbumScreen from '../AlbumScreen';
 import PlaylistScreen from '../PlaylistScreen';
 
 const HomeStack = createStackNavigator();
 function HomeStackScreen() {
   return (
-    <HomeStack.Navigator initialRouteName="Album">
+    <HomeStack.Navigator initialRouteName="Home">
+      <HomeStack.Screen
+        name="Home"
+        component={HomeScreen}
+        options={{headerShown: false}}
+      />
       <HomeStack.Screen
         name="Album"
         component={AlbumScreen}
+        getId={({params}) => params.id}
         options={{headerShown: false}}
       />
       <HomeStack.Screen
         name="Playlist"
         component={PlaylistScreen}
+        getId={({params}) => params.id}
         options={{headerShown: false}}
       />
     </HomeStack.Navigator>
-  );
-}
-
-function SearchScreen() {
-  return (
-    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-      <Text>SearchScreen!</Text>
-    </View>
-  );
-}
-
-function LibraryScreen() {
-  return (
-    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-      <Text>LibraryScreen!</Text>
-    </View>
   );
 }
 
@@ -83,7 +76,7 @@ const MainScreen = () => {
       />
       <Tab.Screen
         name="Library"
-        component={LibraryScreen}
+        component={MyLibraryScreen}
         options={{title: 'My Library'}}
       />
     </Tab.Navigator>
