@@ -134,11 +134,8 @@ const PlayerScreen = props => {
             PLAYING FROM ALBUM
           </Text>
           <TextTicker
-            duration={5000}
-            loop
-            bounce
-            repeatSpacer={50}
-            marqueeDelay={1000}
+            scrollSpeed={500}
+            bounce={false}
             style={styles.topBarTitle}
             numberOfLines={1}>
             {track.albumName}
@@ -153,11 +150,8 @@ const PlayerScreen = props => {
         <View style={styles.trackDetailsRow}>
           <View style={styles.trackDetailsRowContent}>
             <TextTicker
-              duration={5000}
-              loop
-              bounce
-              repeatSpacer={50}
-              marqueeDelay={1000}
+              scrollSpeed={500}
+              bounce={false}
               style={styles.titleText}
               numberOfLines={1}>
               {track.title}
@@ -166,11 +160,8 @@ const PlayerScreen = props => {
             <TextTicker
               style={styles.artistText}
               numberOfLines={1}
-              duration={5000}
-              loop
-              bounce
-              repeatSpacer={50}
-              marqueeDelay={1000}>
+              scrollSpeed={500}
+              bounce={false}>
               {track.artist}
             </TextTicker>
           </View>

@@ -17,7 +17,6 @@ import TrackPlayer, {
 import TextTicker from 'react-native-text-ticker';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {getNavigationRef} from '../../../RootNavigation';
-import {BottomTabBarHeightContext} from '../../App';
 import {getBottomPlayerImageSize} from '../../helpers/playerHelpers';
 import TrackProgressView from '../TrackProgressView';
 
@@ -30,7 +29,6 @@ const BottomPlayer = props => {
   const [track, setTrack] = useState(null);
   const [playerState, setPlayerState] = useState(null);
   const windowWidth = useWindowDimensions().width;
-  const {bottomTabBarHeight} = useContext(BottomTabBarHeightContext);
 
   useEffect(() => {
     let mounted = true;
@@ -79,11 +77,7 @@ const BottomPlayer = props => {
   const {title, artist, artwork} = track;
   const isPlaying = playerState === STATE_PLAYING;
 
-  const containerStyle = [
-    styles.container,
-    props.style,
-    // {bottom: bottomTabBarHeight},
-  ];
+  const containerStyle = [styles.container, props.style];
   const imageSize = getBottomPlayerImageSize(windowWidth);
   const artworkStyle = {width: imageSize, height: imageSize};
 
@@ -102,11 +96,8 @@ const BottomPlayer = props => {
           <TextTicker
             style={styles.artistNames}
             numberOfLines={1}
-            duration={5000}
-            loop
-            bounce
-            repeatSpacer={50}
-            marqueeDelay={1000}>
+            scrollSpeed={500}
+            bounce={false}>
             {artist}
           </TextTicker>
         </View>
@@ -136,10 +127,6 @@ export default BottomPlayer;
 
 const styles = StyleSheet.create({
   container: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
     borderBottomWidth: 1,
     borderBottomColor: '#000000',
     backgroundColor: '#1b1b1b',

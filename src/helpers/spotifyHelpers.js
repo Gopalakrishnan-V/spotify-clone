@@ -6,10 +6,6 @@ export const getFirstArtistName = artists => {
   return artists?.[0]?.name ?? null;
 };
 
-export const getYear = date => {
-  return date.split('-')[0];
-};
-
 export const getArtwork = images => {
   return images?.[0]?.url ?? null;
 };
@@ -46,7 +42,23 @@ export const getTracksFromPlaylist = playlist => {
   );
 };
 
+export const getTrackPlayerItems = items => {
+  return items.map(track => convertSpotifyTrackItemToTrackPlayerItem(track));
+};
+
 export const convertPlaylistTrackItemToTrackPlayerItem = track => {
+  return {
+    id: track.id ?? '-',
+    url: track.preview_url ?? '-',
+    title: track.name ?? '-',
+    artist: getArtistNames(track.artists) ?? '-',
+    artwork: getArtwork(track.album.images) ?? '-',
+    albumId: track.album.id,
+    albumName: track.album.name,
+  };
+};
+
+export const convertSpotifyTrackItemToTrackPlayerItem = track => {
   return {
     id: track.id ?? '-',
     url: track.preview_url ?? '-',

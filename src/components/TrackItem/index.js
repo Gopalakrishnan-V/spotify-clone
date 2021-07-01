@@ -11,7 +11,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {getArtwork} from '../../helpers/spotifyHelpers';
 
 export default function TrackItem(props) {
-  const {data, imageVisible = false} = props;
+  const {data, imageVisible = false, rank, rankVisible = false} = props;
   const windowWidth = useWindowDimensions().width;
   const imageSize = windowWidth * 0.125;
 
@@ -23,8 +23,14 @@ export default function TrackItem(props) {
   return (
     <TouchableOpacity
       onPress={props.onPress}
-      activeOpacity={1.0}
+      activeOpacity={0.8}
       style={styles.container}>
+      {rankVisible && (
+        <Text style={styles.rank} numberOfLines={1}>
+          {String(rank)}
+        </Text>
+      )}
+
       {imageVisible && <Image source={{uri: imageUrl}} style={imageStyle} />}
 
       <View style={styles.content}>
@@ -52,13 +58,20 @@ const styles = StyleSheet.create({
     flex: 1,
     marginRight: 16,
   },
+  rank: {
+    fontSize: 12,
+    color: '#FFF',
+    marginLeft: 4,
+    marginRight: 20,
+  },
   image: {
+    borderRadius: 2,
     marginRight: 12,
   },
   title: {
-    color: '#FFF',
     fontWeight: '500',
     fontSize: 16,
+    color: '#FFF',
   },
   subTitle: {
     color: '#808080',

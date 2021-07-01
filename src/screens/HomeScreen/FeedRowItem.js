@@ -2,11 +2,11 @@ import React from 'react';
 import {
   StyleSheet,
   Text,
-  Image,
   Dimensions,
   View,
   TouchableOpacity,
 } from 'react-native';
+import Image from 'react-native-fast-image';
 
 const IMAGE_SIZE = Dimensions.get('window').width * 0.4;
 

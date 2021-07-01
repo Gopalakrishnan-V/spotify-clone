@@ -3,11 +3,11 @@ import {
   StyleSheet,
   Text,
   View,
-  Image,
   FlatList,
   TouchableOpacity,
   useWindowDimensions,
 } from 'react-native';
+import Image from 'react-native-fast-image';
 import FeedRowItem from './FeedRowItem';
 
 export default function FeedItem({

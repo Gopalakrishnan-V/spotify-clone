@@ -8,11 +8,9 @@ import TrackPlayer, {
 import Navigator from '../Navigator';
 
 export const PlayerStateContext = React.createContext();
-export const BottomTabBarHeightContext = React.createContext();
 
 function App() {
   const [playerState, setPlayerState] = useState(STATE_NONE);
-  const [bottomTabBarHeight, setBottomTabBarHeight] = useState(0);
 
   useEffect(() => {
     const listener = TrackPlayer.addEventListener(
@@ -27,13 +25,9 @@ function App() {
 
   return (
     <PlayerStateContext.Provider value={{playerState, setPlayerState}}>
-      <BottomTabBarHeightContext.Provider
-        value={{bottomTabBarHeight, setBottomTabBarHeight}}>
-        <View style={styles.container}>
-          <Navigator />
-          {/* <BottomPlayer /> */}
-        </View>
-      </BottomTabBarHeightContext.Provider>
+      <View style={styles.container}>
+        <Navigator />
+      </View>
     </PlayerStateContext.Provider>
   );
 }

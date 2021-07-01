@@ -7,6 +7,10 @@ class NavigationHelper {
     navigation.navigate('Playlist', {id});
   };
 
+  gotoArtistScreen = (navigation, id) => {
+    navigation.navigate('Artist', {id});
+  };
+
   gotoAppropriateScreenBasedOnEntity = (navigation, data) => {
     switch (data.type) {
       case 'album': {

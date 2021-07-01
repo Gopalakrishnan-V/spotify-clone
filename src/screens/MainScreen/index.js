@@ -8,6 +8,8 @@ import SearchScreen from '../SearchScreen';
 import MyLibraryScreen from '../MyLibraryScreen';
 import AlbumScreen from '../AlbumScreen';
 import PlaylistScreen from '../PlaylistScreen';
+import ArtistScreen from '../ArtistScreen';
+import TabBarWithPlayer from '../../components/TabBarWithPlayer';
 
 const HomeStack = createStackNavigator();
 function HomeStackScreen() {
@@ -27,6 +29,12 @@ function HomeStackScreen() {
       <HomeStack.Screen
         name="Playlist"
         component={PlaylistScreen}
+        getId={({params}) => params.id}
+        options={{headerShown: false}}
+      />
+      <HomeStack.Screen
+        name="Artist"
+        component={ArtistScreen}
         getId={({params}) => params.id}
         options={{headerShown: false}}
       />
@@ -62,7 +70,8 @@ const MainScreen = () => {
         activeTintColor: '#FFFFFF',
         inactiveTintColor: '#808080',
         style: {backgroundColor: '#1b1b1b'},
-      }}>
+      }}
+      tabBar={props => <TabBarWithPlayer {...props} />}>
       <Tab.Screen
         name="HomeStack"
         component={HomeStackScreen}

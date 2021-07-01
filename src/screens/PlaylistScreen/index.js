@@ -1,12 +1,5 @@
-import React, {
-  useState,
-  useEffect,
-  useContext,
-  useRef,
-  useCallback,
-} from 'react';
+import React, {useState, useEffect, useRef, useCallback} from 'react';
 import {View, FlatList, StyleSheet, Animated} from 'react-native';
-import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
 
 import Button from '../../components/Button';
 import SpotifyClient from '../../../SpotifyClient';
@@ -14,7 +7,7 @@ import AnimatedHeader from '../../components/AnimatedHeader';
 import Loader from '../../components/Loader';
 import AnimatedTopBar from '../../components/AnimatedTopBar';
 import TrackItem from '../../components/TrackItem';
-import {getDominantColor} from '../../helpers/colorHelpers';
+import {getDominantColor, getGradientColors} from '../../helpers/colorHelpers';
 import {addTracks} from '../../helpers/playerHelpers';
 import {
   getTracksFromPlaylist,
@@ -22,7 +15,6 @@ import {
   convertPlaylistTrackItemToTrackPlayerItem,
 } from '../../helpers/spotifyHelpers';
 import ScreenWrapper from '../../components/ScreenWrapper';
-import {BottomTabBarHeightContext} from '../../App';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {APPBAR_HEIGHT} from '../../constants/dimens';
 
@@ -37,9 +29,7 @@ const PlaylistScreen = props => {
   const [playlist, setPlaylist] = useState(null);
   const [headerHeight, setHeaderHeight] = useState(10);
   const [dominantColor, setDominantColor] = useState(null);
-  const tabBarHeight = useBottomTabBarHeight();
   const insets = useSafeAreaInsets();
-  const {setBottomTabBarHeight} = useContext(BottomTabBarHeightContext);
 
   const animatedOffsetValue = useRef(new Animated.Value(0)).current;
 
@@ -69,10 +59,6 @@ const PlaylistScreen = props => {
       } catch (e) {}
     })();
   }, [navigation, playlistId]);
-
-  useEffect(() => {
-    setBottomTabBarHeight(tabBarHeight);
-  }, [setBottomTabBarHeight, tabBarHeight]);
 
   const handlePlayPress = useCallback(() => {
     addTracks(getTracksFromPlaylist(playlist));
@@ -157,7 +143,7 @@ const PlaylistScreen = props => {
           title={name}
           subTitle={subTitle}
           imageUrl={imageUrl}
-          dominantColor={dominantColor}
+          gradientColors={getGradientColors(dominantColor)}
           animatedOpacity={animateHeaderOpacity}
           onLayout={event => {
             const {height} = event.nativeEvent.layout;
@@ -170,6 +156,7 @@ const PlaylistScreen = props => {
             title={playlist.name}
             animatedBgColor={animatedTopBarBgColor}
             animatedTitleOpacity={animatedTopBarTitleOpacity}
+            onBackPress={navigation.goBack}
           />
           <FlatList
             data={listItems}
