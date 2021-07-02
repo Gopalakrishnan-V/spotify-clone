@@ -18,10 +18,11 @@ import {
 } from '../../helpers/spotifyHelpers';
 import ScreenWrapper from '../../components/ScreenWrapper';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {APPBAR_HEIGHT} from '../../constants/dimens';
+import {SPACE_64, SPACE_16, SPACE_24} from '../../constants/dimens';
 import Footer from './Footer';
 import NavigationHelper from '../../helpers/NavigationHelper';
 import {getYear} from '../../helpers/dateHelpers';
+import {COLOR_BACKGROUND, COLOR_TRANSPARENT} from '../../constants/colors';
 
 const ItemType = {
   STICKY_BUTTON: 'STICKY_BUTTON',
@@ -109,20 +110,20 @@ const AlbumScreen = props => {
   }
 
   const animatedTopBarBgColor = animatedOffsetValue.interpolate({
-    inputRange: [0, headerHeight],
-    outputRange: ['#00000000', '#000000ff'],
+    inputRange: [0, headerHeight * 0.5, headerHeight],
+    outputRange: [COLOR_TRANSPARENT, COLOR_TRANSPARENT, COLOR_BACKGROUND],
     extrapolate: 'clamp',
   });
 
   const animatedTopBarTitleOpacity = animatedOffsetValue.interpolate({
-    inputRange: [0, headerHeight],
-    outputRange: [0, 1],
+    inputRange: [0, headerHeight * 0.5, headerHeight],
+    outputRange: [0, 0, 1],
     extrapolate: 'clamp',
   });
 
   const animateHeaderOpacity = animatedOffsetValue.interpolate({
-    inputRange: [0, headerHeight],
-    outputRange: [1, 0],
+    inputRange: [0, headerHeight * 0.5, headerHeight],
+    outputRange: [1, 0.3, 0],
     extrapolate: 'clamp',
   });
 
@@ -172,7 +173,7 @@ const AlbumScreen = props => {
             showsVerticalScrollIndicator={false}
             contentContainerStyle={[
               styles.list,
-              {paddingTop: headerHeight - APPBAR_HEIGHT - insets.top},
+              {paddingTop: headerHeight - SPACE_64 - insets.top},
             ]}
             extraData={{dominantColor}}
             scrollEventThrottle={16}
@@ -198,11 +199,10 @@ const styles = StyleSheet.create({
     bottom: 0,
   },
   list: {
-    paddingBottom: 16,
+    paddingBottom: SPACE_16,
   },
   shuffleButton: {
     alignSelf: 'center',
-    marginTop: 0,
-    marginBottom: 24,
+    marginBottom: SPACE_24,
   },
 });

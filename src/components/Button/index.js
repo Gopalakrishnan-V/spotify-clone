@@ -1,5 +1,9 @@
 import React from 'react';
-import {StyleSheet, Text, TouchableOpacity} from 'react-native';
+import {StyleSheet, TouchableOpacity} from 'react-native';
+import Text from '../Text';
+import {COLOR_BLACK, COLOR_PRIMARY} from '../../constants/colors';
+import {SPACE_24, SPACE_32, SPACE_48} from '../../constants/dimens';
+import {FONT_BOLD} from '../../constants';
 
 export default function Button(props) {
   return (
@@ -7,7 +11,11 @@ export default function Button(props) {
       onPress={props.onPress}
       activeOpacity={0.9}
       style={[styles.container, props.style]}>
-      <Text style={[styles.text, props.textStyle]}>{props.text}</Text>
+      <Text
+        label={props.text}
+        as="title5"
+        style={[styles.text, props.textStyle]}
+      />
     </TouchableOpacity>
   );
 }
@@ -18,14 +26,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: 32,
-    height: 48,
-    borderRadius: 24,
-    backgroundColor: '#1DB954',
+    paddingHorizontal: SPACE_32,
+    height: SPACE_48,
+    borderRadius: SPACE_24,
+    backgroundColor: COLOR_PRIMARY,
   },
   text: {
-    color: '#000000',
-    fontSize: 16,
-    fontWeight: 'bold',
+    fontFamily: FONT_BOLD,
+    color: COLOR_BLACK,
   },
 });

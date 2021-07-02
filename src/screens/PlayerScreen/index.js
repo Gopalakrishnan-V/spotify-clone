@@ -1,11 +1,10 @@
 import React, {useState, useEffect, useCallback} from 'react';
 import {
   View,
-  Text,
   Image,
   StyleSheet,
-  TouchableOpacity,
   useWindowDimensions,
+  Dimensions,
 } from 'react-native';
 import TrackPlayer, {
   TrackPlayerEvents,
@@ -15,24 +14,41 @@ import TrackPlayer, {
 import TextTicker from 'react-native-text-ticker';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import LinearGradient from 'react-native-linear-gradient';
-import TrackSlider from '../../components/TrackSlider';
+
 import {getDominantColor, getGradientColors} from '../../helpers/colorHelpers';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {
+  COLOR_BACKGROUND,
+  COLOR_FADED,
+  COLOR_TEXT_SECONDARY,
+  COLOR_WHITE,
+} from '../../constants/colors';
+import {
+  SPACE_4,
+  SPACE_16,
+  SPACE_24,
+  SPACE_32,
+  SPACE_64,
+  SPACE_48,
+} from '../../constants/dimens';
+import textStyles from '../../constants/textStyles';
+import {} from '../../constants';
+import Header from './Header';
+import BottomControls from './BottomControls';
 
 const events = [
   TrackPlayerEvents.PLAYBACK_STATE,
   TrackPlayerEvents.PLAYBACK_ERROR,
 ];
 
-const COLOR_BLACK = '#000000';
+const IMAGE_SIZE = Dimensions.get('window').width - SPACE_48;
 
 const PlayerScreen = props => {
   const {navigation} = props;
   const [track, setTrack] = useState(null);
   const [playerState, setPlayerState] = useState(null);
-  const [dominantColor, setDominantColor] = useState(COLOR_BLACK);
+  const [dominantColor, setDominantColor] = useState(COLOR_BACKGROUND);
 
-  const windowWidth = useWindowDimensions().width;
   const insets = useSafeAreaInsets();
 
   useEffect(() => {
@@ -48,7 +64,7 @@ const PlayerScreen = props => {
         setTrack(track);
         const dominantColor = await getDominantColor(
           track.artwork,
-          COLOR_BLACK,
+          COLOR_BACKGROUND,
         );
         if (!mounted) return;
         setDominantColor(dominantColor);
@@ -68,7 +84,7 @@ const PlayerScreen = props => {
             setTrack(track);
             const dominantColor = await getDominantColor(
               track.artwork,
-              COLOR_BLACK,
+              COLOR_BACKGROUND,
             );
             if (!mounted) return;
             setDominantColor(dominantColor);
@@ -80,7 +96,9 @@ const PlayerScreen = props => {
     );
 
     TrackPlayer.getState().then(state => {
-      if (!mounted) return;
+      if (!mounted) {
+        return;
+      }
       setPlayerState(state);
     });
 
@@ -110,100 +128,30 @@ const PlayerScreen = props => {
   }
 
   const containerStyle = [styles.container, {paddingBottom: insets.bottom + 8}];
-  const topBarStyle = [styles.topBar, {marginTop: insets.top}];
-  const artworkStyle = {
-    width: windowWidth - 24 * 2,
-    height: windowWidth - 24 * 2,
-  };
+  const topBarStyle = {marginTop: insets.top};
 
   const colors = getGradientColors(dominantColor);
 
   return (
     <LinearGradient colors={colors} style={containerStyle}>
-      <View style={topBarStyle}>
-        <Icon
-          name="chevron-down"
-          size={32}
-          color="#FFFFFF"
-          onPress={() => navigation.goBack()}
-        />
-        <TouchableOpacity
-          onPress={handleHeaderAlbumPress}
-          style={styles.topBarContent}>
-          <Text style={styles.topBarSubtitle} numberOfLines={1}>
-            PLAYING FROM ALBUM
-          </Text>
-          <TextTicker
-            scrollSpeed={500}
-            bounce={false}
-            style={styles.topBarTitle}
-            numberOfLines={1}>
-            {track.albumName}
-          </TextTicker>
-        </TouchableOpacity>
-        <Icon name="dots-vertical" size={24} color="#FFFFFF" />
-      </View>
+      <Header
+        albumName={track.albumName}
+        style={topBarStyle}
+        onDownPress={navigation.goBack}
+        onAlbumPress={handleHeaderAlbumPress}
+      />
 
-      <Image source={{uri: track.artwork}} style={artworkStyle} />
+      <Image source={{uri: track.artwork}} style={styles.image} />
 
-      <View>
-        <View style={styles.trackDetailsRow}>
-          <View style={styles.trackDetailsRowContent}>
-            <TextTicker
-              scrollSpeed={500}
-              bounce={false}
-              style={styles.titleText}
-              numberOfLines={1}>
-              {track.title}
-            </TextTicker>
-
-            <TextTicker
-              style={styles.artistText}
-              numberOfLines={1}
-              scrollSpeed={500}
-              bounce={false}>
-              {track.artist}
-            </TextTicker>
-          </View>
-          <Icon name="heart-outline" size={24} color="white" />
-        </View>
-
-        <TrackSlider style={styles.trackProgress} />
-
-        <View style={styles.controlsRow}>
-          <Icon name="shuffle" size={24} color="white" />
-          <Icon
-            name="skip-previous"
-            size={32}
-            color="white"
-            onPress={() => TrackPlayer.skipToPrevious()}
-          />
-          <Icon
-            name={isPlaying ? 'pause-circle' : 'play-circle'}
-            onPress={() => {
-              if (isPlaying) {
-                TrackPlayer.pause();
-              } else {
-                TrackPlayer.play();
-              }
-            }}
-            size={64}
-            color="white"
-          />
-          <Icon
-            name="skip-next"
-            size={32}
-            color="white"
-            onPress={() => TrackPlayer.skipToNext()}
-          />
-          <Icon name="repeat" size={24} color="white" />
-        </View>
-
-        <View style={styles.bottomRow}>
-          <Icon name="monitor-speaker" size={20} color="#808080" />
-          <Icon name="playlist-music" size={24} color="#808080" />
-        </View>
-      </View>
+      <BottomControls
+        title={track.title}
+        artist={track.artist}
+        isPlaying={isPlaying}
+        onPreviousPress={() => TrackPlayer.skipToPrevious()}
+        onPlayPress={() => TrackPlayer.play()}
+        onPausePress={() => TrackPlayer.pause()}
+        onNextPress={() => TrackPlayer.skipToNext()}
+      />
     </LinearGradient>
   );
 };
@@ -212,67 +160,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'space-between',
-    paddingHorizontal: 24,
+    paddingHorizontal: SPACE_24,
   },
-  topBar: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginTop: 0,
-    marginHorizontal: -6,
-  },
-  topBarContent: {
-    flex: 1,
-    marginHorizontal: 12,
-    alignItems: 'center',
-  },
-  topBarTitle: {
-    marginTop: 2,
-    fontSize: 12,
-    fontWeight: 'bold',
-    color: '#FFFFFF',
-  },
-  topBarSubtitle: {
-    fontSize: 10,
-    color: '#FFFFFF',
-  },
-  artwork: {
-    width: 200,
-    height: 200,
-  },
-  trackDetailsRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  trackDetailsRowContent: {
-    flex: 1,
-    marginRight: 16,
-    justifyContent: 'center',
-  },
-  titleText: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#FFFFFF',
-  },
-  artistText: {
-    fontSize: 14,
-    marginTop: 4,
-    color: '#7D7D7D',
-  },
-  trackProgress: {
-    marginTop: 4,
-  },
-  controlsRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginTop: 4,
-  },
-  bottomRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginTop: 16,
+  image: {
+    width: IMAGE_SIZE,
+    height: IMAGE_SIZE,
   },
 });
 

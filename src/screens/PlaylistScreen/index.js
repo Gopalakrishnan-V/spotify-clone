@@ -16,7 +16,9 @@ import {
 } from '../../helpers/spotifyHelpers';
 import ScreenWrapper from '../../components/ScreenWrapper';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {APPBAR_HEIGHT} from '../../constants/dimens';
+import {SPACE_24, SPACE_64} from '../../constants/dimens';
+import {COLOR_BACKGROUND, COLOR_TRANSPARENT} from '../../constants/colors';
+import {commas} from '../../helpers/textHelpers';
 
 const ItemType = {
   STICKY_BUTTON: 'STICKY_BUTTON',
@@ -102,20 +104,20 @@ const PlaylistScreen = props => {
   }
 
   const animatedTopBarBgColor = animatedOffsetValue.interpolate({
-    inputRange: [0, headerHeight],
-    outputRange: ['#00000000', '#000000ff'],
+    inputRange: [0, headerHeight * 0.3, headerHeight],
+    outputRange: [COLOR_TRANSPARENT, COLOR_TRANSPARENT, COLOR_BACKGROUND],
     extrapolate: 'clamp',
   });
 
   const animatedTopBarTitleOpacity = animatedOffsetValue.interpolate({
-    inputRange: [0, headerHeight],
-    outputRange: [0, 1],
+    inputRange: [0, headerHeight * 0.3, headerHeight],
+    outputRange: [0, 0, 1],
     extrapolate: 'clamp',
   });
 
   const animateHeaderOpacity = animatedOffsetValue.interpolate({
-    inputRange: [0, headerHeight],
-    outputRange: [1, 0],
+    inputRange: [0, headerHeight * 0.5, headerHeight],
+    outputRange: [1, 0.3, 0],
     extrapolate: 'clamp',
   });
 
@@ -126,7 +128,7 @@ const PlaylistScreen = props => {
     subTitleParts.push(`BY ${owner.display_name}`.toUpperCase());
   }
   if (followers) {
-    subTitleParts.push(`${followers.total} LIKES`);
+    subTitleParts.push(`${commas(followers.total)} LIKES`);
   }
   const subTitle = subTitleParts.join(' • ');
 
@@ -138,42 +140,39 @@ const PlaylistScreen = props => {
 
   return (
     <ScreenWrapper>
-      <View style={styles.container}>
-        <AnimatedHeader
-          title={name}
-          subTitle={subTitle}
-          imageUrl={imageUrl}
-          gradientColors={getGradientColors(dominantColor)}
-          animatedOpacity={animateHeaderOpacity}
-          onLayout={event => {
-            const {height} = event.nativeEvent.layout;
-            setHeaderHeight(height);
-          }}
-        />
+      <AnimatedHeader
+        title={name}
+        subTitle={subTitle}
+        imageUrl={imageUrl}
+        gradientColors={getGradientColors(dominantColor)}
+        animatedOpacity={animateHeaderOpacity}
+        onLayout={event => {
+          const {height} = event.nativeEvent.layout;
+          setHeaderHeight(height);
+        }}
+      />
 
-        <View style={styles.listWrapper}>
-          <AnimatedTopBar
-            title={playlist.name}
-            animatedBgColor={animatedTopBarBgColor}
-            animatedTitleOpacity={animatedTopBarTitleOpacity}
-            onBackPress={navigation.goBack}
-          />
-          <FlatList
-            data={listItems}
-            renderItem={renderItem}
-            keyExtractor={(_item, index) => String(index)}
-            stickyHeaderIndices={[0]}
-            alwaysBounceVertical={false}
-            showsVerticalScrollIndicator={false}
-            contentContainerStyle={[
-              styles.list,
-              {paddingTop: headerHeight - APPBAR_HEIGHT - insets.top},
-            ]}
-            extraData={{dominantColor}}
-            scrollEventThrottle={16}
-            onScroll={onScrollEvent}
-          />
-        </View>
+      <View style={styles.listWrapper}>
+        <AnimatedTopBar
+          title={playlist.name}
+          animatedBgColor={animatedTopBarBgColor}
+          animatedTitleOpacity={animatedTopBarTitleOpacity}
+          onBackPress={navigation.goBack}
+        />
+        <FlatList
+          data={listItems}
+          renderItem={renderItem}
+          keyExtractor={(_item, index) => String(index)}
+          stickyHeaderIndices={[0]}
+          alwaysBounceVertical={false}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{
+            paddingTop: headerHeight - SPACE_64 - insets.top,
+          }}
+          extraData={{dominantColor}}
+          scrollEventThrottle={16}
+          onScroll={onScrollEvent}
+        />
       </View>
     </ScreenWrapper>
   );
@@ -182,9 +181,6 @@ const PlaylistScreen = props => {
 export default PlaylistScreen;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
   listWrapper: {
     position: 'absolute',
     top: 0,
@@ -192,10 +188,8 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
   },
-  list: {},
   playButton: {
     alignSelf: 'center',
-    marginTop: 0,
-    marginBottom: 24,
+    marginBottom: SPACE_24,
   },
 });

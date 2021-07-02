@@ -1,8 +1,10 @@
 import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
-// import Slider from '@react-native-community/slider';
+import {View, StyleSheet} from 'react-native';
 import Slider from 'react-native-smooth-slider';
 import TrackPlayer from 'react-native-track-player';
+import Text from '../Text';
+import {COLOR_WHITE} from '../../constants/colors';
+import {SPACE_8} from '../../constants/dimens';
 import {toHHMMSS} from '../../helpers/durationHelpers';
 
 class TrackSlider extends TrackPlayer.ProgressComponent {
@@ -17,19 +19,19 @@ class TrackSlider extends TrackPlayer.ProgressComponent {
     const durationText = toHHMMSS(duration);
 
     return (
-      <View style={[styles.container, this.props.style]}>
+      <View style={this.props.style}>
         <Slider
           value={this.getProgress()}
           useNativeDriver={true}
-          thumbTintColor={'#FFFFFF'}
-          minimumTrackTintColor={'#FFFFFF'}
-          maximumTrackTintColor={`${'#FFFFFF'}44`}
+          thumbTintColor={COLOR_WHITE}
+          minimumTrackTintColor={COLOR_WHITE}
+          maximumTrackTintColor={`${COLOR_WHITE}44`}
           onSlidingComplete={this.handleSlidingComplete}
         />
 
         <View style={styles.durationRow}>
-          <Text style={styles.durationText}>{positionText}</Text>
-          <Text style={styles.durationText}>{durationText}</Text>
+          <Text label={positionText} as="small2" />
+          <Text label={durationText} as="small2" />
         </View>
       </View>
     );
@@ -37,16 +39,11 @@ class TrackSlider extends TrackPlayer.ProgressComponent {
 }
 
 const styles = StyleSheet.create({
-  container: {},
   durationRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginTop: -8,
-  },
-  durationText: {
-    fontSize: 12,
-    color: '#7D7D7D',
+    marginTop: -SPACE_8,
   },
 });
 

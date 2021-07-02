@@ -2,11 +2,13 @@ import React from 'react';
 import {
   StyleSheet,
   View,
-  Text,
   Image,
   TouchableOpacity,
   useWindowDimensions,
 } from 'react-native';
+import Text from '../Text';
+import {COLOR_BACKGROUND, COLOR_TEXT_SECONDARY} from '../../constants/colors';
+import {SPACE_12, SPACE_16, SPACE_4} from '../../constants/dimens';
 import {getYear} from '../../helpers/dateHelpers';
 
 export default function AlbumItem(props) {
@@ -29,12 +31,14 @@ export default function AlbumItem(props) {
       <Image source={{uri: imageUrl}} style={imageStyle} />
 
       <View style={styles.content}>
-        <Text style={styles.title} numberOfLines={1} ellipsizeMode="tail">
-          {name}
-        </Text>
-        <Text style={styles.subTitle} numberOfLines={1} ellipsizeMode="tail">
-          {subTitle}
-        </Text>
+        <Text label={name} as="title5" numberOfLines={1} ellipsizeMode="tail" />
+        <Text
+          label={subTitle}
+          as="small1"
+          style={styles.subTitle}
+          numberOfLines={1}
+          ellipsizeMode="tail"
+        />
       </View>
     </TouchableOpacity>
   );
@@ -44,25 +48,19 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 16,
-    paddingVertical: 16,
-    backgroundColor: '#000000',
+    paddingHorizontal: SPACE_16,
+    paddingVertical: SPACE_16,
+    backgroundColor: COLOR_BACKGROUND,
   },
   content: {
     flex: 1,
   },
   image: {
-    borderRadius: 4,
-    marginRight: 12,
-  },
-  title: {
-    fontWeight: '500',
-    fontSize: 16,
-    color: '#FFF',
+    borderRadius: SPACE_4,
+    marginRight: SPACE_12,
   },
   subTitle: {
-    color: '#808080',
-    fontSize: 14,
-    marginTop: 4,
+    color: COLOR_TEXT_SECONDARY,
+    marginTop: SPACE_4,
   },
 });

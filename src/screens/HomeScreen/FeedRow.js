@@ -1,14 +1,15 @@
 import React, {useCallback} from 'react';
 import {
   StyleSheet,
-  Text,
   View,
   FlatList,
   TouchableOpacity,
   useWindowDimensions,
 } from 'react-native';
+import Text from '../../components/Text';
 import Image from 'react-native-fast-image';
 import FeedRowItem from './FeedRowItem';
+import {SPACE_16, SPACE_2} from '../../constants/dimens';
 
 export default function FeedItem({
   data,
@@ -55,17 +56,16 @@ export default function FeedItem({
         {!!image_url && (
           <Image source={{uri: image_url}} style={headerImageStyle} />
         )}
-        <View style={styles.headerContent}>
+        <View>
           {!!sub_title && (
-            <Text style={styles.subTitle} numberOfLines={1}>
-              {sub_title}
-            </Text>
+            <Text
+              style={styles.subTitle}
+              as="small2"
+              numberOfLines={1}
+              label={sub_title}
+            />
           )}
-          {!!title && (
-            <Text style={styles.title} numberOfLines={1}>
-              {title}
-            </Text>
-          )}
+          {!!title && <Text as="title3" numberOfLines={1} label={title} />}
         </View>
       </TouchableOpacity>
 
@@ -88,24 +88,16 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 16,
+    paddingHorizontal: SPACE_16,
   },
   headerImage: {
-    marginRight: 16,
+    marginRight: SPACE_16,
   },
-  headerContent: {},
   subTitle: {
-    color: '#808080',
-    marginBottom: 2,
-    fontSize: 12,
-  },
-  title: {
-    color: '#FFF',
-    fontWeight: 'bold',
-    fontSize: 26,
+    marginBottom: SPACE_2,
   },
   list: {
-    marginTop: 16,
-    paddingHorizontal: 16,
+    marginTop: SPACE_16,
+    paddingHorizontal: SPACE_16,
   },
 });

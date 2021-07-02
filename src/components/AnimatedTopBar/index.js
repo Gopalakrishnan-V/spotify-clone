@@ -1,7 +1,10 @@
 import React from 'react';
-import {View, StyleSheet, Text, Animated} from 'react-native';
+import {View, StyleSheet, Animated} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {COLOR_WHITE} from '../../constants/colors';
+import {SPACE_16, SPACE_24, SPACE_64, SPACE_8} from '../../constants/dimens';
+import textStyles from '../../constants/textStyles';
 
 const AnimatedTopBar = props => {
   const insets = useSafeAreaInsets();
@@ -18,32 +21,26 @@ const AnimatedTopBar = props => {
         <View style={styles.left}>
           <Icon
             name="keyboard-backspace"
-            size={24}
-            color="#FFFFFF"
-            onPress={() => props.onBackPress()}
+            size={SPACE_24}
+            color={COLOR_WHITE}
+            onPress={props.onBackPress}
           />
         </View>
 
         <View style={styles.titleContainer}>
           <Animated.Text
-            style={[styles.title, {opacity: props.animatedTitleOpacity}]}
+            style={[textStyles.title5, {opacity: props.animatedTitleOpacity}]}
             numberOfLines={1}>
             {props.title}
           </Animated.Text>
         </View>
 
         <View style={styles.right}>
-          <Icon
-            name="heart-outline"
-            size={24}
-            color="#FFFFFF"
-            onPress={() => {}}
-          />
+          <Icon name="heart-outline" size={SPACE_24} color={COLOR_WHITE} />
           <Icon
             name="dots-vertical"
-            size={24}
-            color="#FFFFFF"
-            onPress={() => {}}
+            size={SPACE_24}
+            color={COLOR_WHITE}
             style={styles.menuIcon}
           />
         </View>
@@ -56,36 +53,30 @@ export default AnimatedTopBar;
 
 const styles = StyleSheet.create({
   container: {
-    zIndex: 10,
-    backgroundColor: '#1b1b1b',
+    zIndex: 1,
   },
   content: {
-    height: 64,
-    paddingHorizontal: 8,
+    height: SPACE_64,
+    paddingHorizontal: SPACE_8,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
   },
   left: {
-    width: 64,
+    width: SPACE_64,
   },
   titleContainer: {
     flex: 1,
     alignItems: 'center',
-    marginHorizontal: 16,
-  },
-  title: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#FFFFFF',
+    marginHorizontal: SPACE_16,
   },
   right: {
-    width: 64,
+    width: SPACE_64,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
   },
   menuIcon: {
-    marginLeft: 16,
+    marginLeft: SPACE_16,
   },
 });

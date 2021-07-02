@@ -1,12 +1,9 @@
 import React from 'react';
-import {
-  View,
-  TouchableOpacity,
-  StyleSheet,
-  Dimensions,
-  Text,
-} from 'react-native';
+import {View, TouchableOpacity, StyleSheet, Dimensions} from 'react-native';
 import Image from 'react-native-fast-image';
+import Text from '../../components/Text';
+import {FONT_MEDIUM} from '../../constants';
+import {SPACE_12, SPACE_16, SPACE_24, SPACE_4} from '../../constants/dimens';
 import {formatDate} from '../../helpers/dateHelpers';
 import {toHHMMSS} from '../../helpers/durationHelpers';
 import {pluralize} from '../../helpers/textHelpers';
@@ -34,22 +31,24 @@ const Footer = ({album, onArtistPress}) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.releaseDate}>{formattedDate}</Text>
-      <Text style={styles.songsCountDurationText}>
-        {songsCountDurationText}
-      </Text>
+      <Text label={formattedDate} as="title5" />
+      <Text
+        label={songsCountDurationText}
+        as="title5"
+        style={styles.songsCountDurationText}
+      />
 
       {!!artist && (
         <TouchableOpacity
           onPress={() => onArtistPress(artist)}
           style={styles.artistContainer}>
           <Image style={styles.artistImage} />
-          <Text style={styles.artistName}>{artist.name}</Text>
+          <Text label={artist.name} as="small1" style={styles.artistName} />
         </TouchableOpacity>
       )}
 
       {!!copyRightText && (
-        <Text style={styles.copyRightText}>{copyRightText}</Text>
+        <Text label={copyRightText} as="small1" style={styles.copyRightText} />
       )}
     </View>
   );
@@ -57,24 +56,16 @@ const Footer = ({album, onArtistPress}) => {
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 12,
-    paddingHorizontal: 16,
-  },
-  releaseDate: {
-    fontWeight: '500',
-    fontSize: 16,
-    color: '#FFF',
+    paddingTop: SPACE_12,
+    paddingHorizontal: SPACE_16,
   },
   songsCountDurationText: {
-    fontWeight: '500',
-    fontSize: 16,
-    marginTop: 4,
-    color: '#FFF',
+    marginTop: SPACE_4,
   },
   artistContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 16,
+    marginTop: SPACE_16,
   },
   artistImage: {
     width: ARTIST_IMAGE_SIZE,
@@ -83,17 +74,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#262626',
   },
   artistName: {
-    marginLeft: 12,
-    fontWeight: '500',
-    fontSize: 14,
-    color: '#FFF',
+    marginLeft: SPACE_12,
+    fontFamily: FONT_MEDIUM,
   },
   copyRightText: {
-    fontWeight: '500',
-    marginTop: 24,
-    marginBottom: 12,
-    fontSize: 14,
-    color: '#FFF',
+    marginTop: SPACE_24,
+    marginBottom: SPACE_12,
+    fontFamily: FONT_MEDIUM,
   },
 });
 

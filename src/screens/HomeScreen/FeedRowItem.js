@@ -1,12 +1,9 @@
 import React from 'react';
-import {
-  StyleSheet,
-  Text,
-  Dimensions,
-  View,
-  TouchableOpacity,
-} from 'react-native';
+import {StyleSheet, Dimensions, View, TouchableOpacity} from 'react-native';
 import Image from 'react-native-fast-image';
+import {SPACE_2, SPACE_4, SPACE_8} from '../../constants/dimens';
+import Text from '../../components/Text';
+import {FONT_BOLD} from '../../constants';
 
 const IMAGE_SIZE = Dimensions.get('window').width * 0.4;
 
@@ -22,14 +19,22 @@ export default function FeedRowItem({data, isFirstItem, onPress}) {
       <View>
         <Image source={{uri: image_url}} style={styles.image} />
         <View style={styles.textWrapper}>
-          <Text numberOfLines={1} ellipsizeMode="tail" style={styles.title}>
-            {title}
-          </Text>
+          <Text
+            numberOfLines={1}
+            ellipsizeMode="tail"
+            as="title6"
+            style={styles.title}
+            label={title}
+          />
         </View>
         <View style={styles.textWrapper}>
-          <Text numberOfLines={2} ellipsizeMode="tail" style={styles.subTitle}>
-            {sub_title}
-          </Text>
+          <Text
+            label={sub_title}
+            as="small2"
+            numberOfLines={2}
+            ellipsizeMode="tail"
+            style={styles.subTitle}
+          />
         </View>
       </View>
     </TouchableOpacity>
@@ -41,23 +46,19 @@ const styles = StyleSheet.create({
   image: {
     width: IMAGE_SIZE,
     height: IMAGE_SIZE,
-    borderRadius: 4,
-    marginBottom: 8,
+    borderRadius: SPACE_4,
+    marginBottom: SPACE_8,
   },
   textWrapper: {
     width: IMAGE_SIZE,
     flexDirection: 'row',
   },
   title: {
-    color: '#FFFFFF',
-    fontWeight: 'bold',
-    fontSize: 14,
+    fontFamily: FONT_BOLD,
   },
   subTitle: {
     flex: 1,
     flexShrink: 1,
-    color: '#808080',
-    fontSize: 12,
-    marginTop: 2,
+    marginTop: SPACE_2,
   },
 });

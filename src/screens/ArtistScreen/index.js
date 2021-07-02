@@ -1,6 +1,7 @@
 import React, {useState, useEffect, useRef, useCallback} from 'react';
-import {View, Text, FlatList, StyleSheet, Animated} from 'react-native';
+import {View, FlatList, StyleSheet, Animated} from 'react-native';
 
+import Text from '../../components/Text';
 import Button from '../../components/Button';
 import SpotifyClient from '../../../SpotifyClient';
 import AnimatedHeader from '../../components/AnimatedHeader';
@@ -16,9 +17,17 @@ import {
 } from '../../helpers/spotifyHelpers';
 import ScreenWrapper from '../../components/ScreenWrapper';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {APPBAR_HEIGHT} from '../../constants/dimens';
-import {commas, nFormatter} from '../../helpers/textHelpers';
+import {
+  SPACE_16,
+  SPACE_24,
+  SPACE_4,
+  SPACE_48,
+  SPACE_64,
+  SPACE_8,
+} from '../../constants/dimens';
+import {commas} from '../../helpers/textHelpers';
 import NavigationHelper from '../../helpers/NavigationHelper';
+import {COLOR_BACKGROUND, COLOR_TRANSPARENT} from '../../constants/colors';
 
 const ItemType = {
   STICKY_BUTTON: 'STICKY_BUTTON',
@@ -104,7 +113,7 @@ const ArtistScreen = props => {
         case ItemType.SECTION_HEADER: {
           return (
             <View style={[styles.sectionHeader, item.style]}>
-              <Text style={styles.sectionHeaderText}>{item.title}</Text>
+              <Text label={item.title} as="title5" />
             </View>
           );
         }
@@ -116,6 +125,7 @@ const ArtistScreen = props => {
               rank={item.rank}
               rankVisible={true}
               onPress={handleTrackPress(item.data)}
+              style={styles.trackItem}
             />
           );
         }
@@ -137,19 +147,19 @@ const ArtistScreen = props => {
   }
 
   const animatedTopBarBgColor = animatedOffsetValue.interpolate({
-    inputRange: [0, headerHeight / 2, headerHeight],
-    outputRange: ['#00000000', '#00000000', '#000000ff'],
+    inputRange: [0, headerHeight * 0.3, headerHeight],
+    outputRange: [COLOR_TRANSPARENT, COLOR_TRANSPARENT, COLOR_BACKGROUND],
     extrapolate: 'clamp',
   });
 
   const animatedTopBarTitleOpacity = animatedOffsetValue.interpolate({
-    inputRange: [0, headerHeight / 2, headerHeight],
+    inputRange: [0, headerHeight * 0.3, headerHeight],
     outputRange: [0, 0, 1],
     extrapolate: 'clamp',
   });
 
   const animateHeaderOpacity = animatedOffsetValue.interpolate({
-    inputRange: [0, headerHeight / 2, headerHeight],
+    inputRange: [0, headerHeight * 0.5, headerHeight],
     outputRange: [1, 0.3, 0],
     extrapolate: 'clamp',
   });
@@ -195,7 +205,7 @@ const ArtistScreen = props => {
           title={artist.name}
           subTitle={subTitle}
           imageUrl={imageUrl}
-          gradientColors={['#00000000', '#000000FF']}
+          gradientColors={[COLOR_TRANSPARENT, COLOR_BACKGROUND]}
           animatedOpacity={animateHeaderOpacity}
           mode="artist"
           onLayout={event => {
@@ -214,14 +224,13 @@ const ArtistScreen = props => {
           <FlatList
             data={listItems}
             renderItem={renderItem}
-            // ListFooterComponent={<Footer album={album} />}
             keyExtractor={(_item, index) => String(index)}
             stickyHeaderIndices={[0]}
             alwaysBounceVertical={false}
             showsVerticalScrollIndicator={false}
             contentContainerStyle={[
               styles.list,
-              {paddingTop: headerHeight - APPBAR_HEIGHT - insets.top},
+              {paddingTop: headerHeight - SPACE_64 - insets.top},
             ]}
             scrollEventThrottle={16}
             onScroll={onScrollEvent}
@@ -246,26 +255,26 @@ const styles = StyleSheet.create({
     bottom: 0,
   },
   list: {
-    paddingBottom: 16,
+    paddingBottom: SPACE_16,
   },
   stickyButton: {
     alignSelf: 'center',
     marginTop: 0,
-    marginBottom: -24,
+    marginBottom: -SPACE_24,
   },
   stickyButtonBottomSpace: {
-    height: 48,
-    backgroundColor: '#000',
+    height: SPACE_48,
+    backgroundColor: COLOR_BACKGROUND,
   },
   sectionHeader: {
     alignItems: 'center',
-    paddingHorizontal: 8,
-    paddingVertical: 8,
-    backgroundColor: '#000000',
+    paddingHorizontal: SPACE_8,
+    paddingTop: SPACE_4,
+    paddingBottom: SPACE_8,
+    backgroundColor: COLOR_BACKGROUND,
   },
-  sectionHeaderText: {
-    fontWeight: 'bold',
-    fontSize: 18,
-    color: '#FFF',
+  trackItem: {
+    paddingTop: SPACE_8,
+    paddingBottom: SPACE_8,
   },
 });
