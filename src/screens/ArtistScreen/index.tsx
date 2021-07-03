@@ -2,10 +2,10 @@ import React, {useState, useEffect, useRef, useCallback} from 'react';
 import {View, FlatList, StyleSheet, Animated} from 'react-native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {RouteProp} from '@react-navigation/native';
+import {useSelector, useDispatch} from 'react-redux';
 
 import Text from '../../components/Text';
 import Button from '../../components/Button';
-import SpotifyClient from '../../../SpotifyClient';
 import AnimatedHeader from '../../components/AnimatedHeader';
 import Loader from '../../components/Loader';
 import AnimatedTopBar from '../../components/AnimatedTopBar';
@@ -28,9 +28,12 @@ import {commas} from '../../helpers/textHelpers';
 import NavigationHelper from '../../helpers/NavigationHelper';
 import {COLOR_BACKGROUND, COLOR_TRANSPARENT} from '../../constants/colors';
 import {HomeStackParamList} from '../MainScreen';
-import {IArtistDetails} from '../../interfaces/artist';
-import {ITrack} from '../../interfaces/track';
-import {IAlbumItem} from '../../interfaces/album';
+import {RootState} from '../../store';
+import {
+  fetchArtistAlbums,
+  fetchArtistDetails,
+  fetchArtistTopTracks,
+} from '../../slices/artist';
 
 const ItemType = {
   STICKY_BUTTON: 'STICKY_BUTTON',
@@ -48,9 +51,22 @@ interface ArtistScreenProps {
 const ArtistScreen: React.FC<ArtistScreenProps> = props => {
   const {route, navigation} = props;
   const artistId = route.params.id;
-  const [artist, setArtist] = useState<IArtistDetails>();
-  const [topTracks, setTopTracks] = useState<{tracks: ITrack[]}>();
-  const [albums, setAlbums] = useState<{items: IAlbumItem[]}>();
+  const dispatch = useDispatch();
+
+  const {artist, topTracks, albums, currentTrack} = useSelector(
+    (state: RootState) => {
+      return {
+        artistLoading: state.artist.detailsLoading[artistId],
+        artist: state.artist.details[artistId],
+        topTracksLoading: state.artist.topTracksLoading[artistId],
+        topTracks: state.artist.topTracks[artistId],
+        albumsLoading: state.artist.albumsLoading[artistId],
+        albums: state.artist.albums[artistId],
+        currentTrack: state.player.track,
+      };
+    },
+  );
+
   const [headerHeight, setHeaderHeight] = useState(10);
   const insets = useSafeAreaInsets();
 
@@ -70,22 +86,10 @@ const ArtistScreen: React.FC<ArtistScreenProps> = props => {
   ).current;
 
   useEffect(() => {
-    (async () => {
-      try {
-        const promises = [
-          SpotifyClient.get(`v1/artists/${artistId}?market=IN`),
-          SpotifyClient.get(`v1/artists/${artistId}/top-tracks?market=IN`),
-          SpotifyClient.get(`v1/artists/${artistId}/albums?market=IN&limit=5`),
-        ];
-        const [artistRes, topTracksRes, albumsRes] = await Promise.all(
-          promises,
-        );
-        setArtist(artistRes?.data);
-        setTopTracks(topTracksRes?.data);
-        setAlbums(albumsRes?.data);
-      } catch (e) {}
-    })();
-  }, [artistId, navigation]);
+    dispatch(fetchArtistDetails(artistId));
+    dispatch(fetchArtistTopTracks(artistId));
+    dispatch(fetchArtistAlbums(artistId));
+  }, [artistId, dispatch]);
 
   const handleShufflePress = useCallback(() => {
     if (topTracks) {
@@ -139,6 +143,7 @@ const ArtistScreen: React.FC<ArtistScreenProps> = props => {
           return (
             <TrackItem
               data={item.data}
+              isPlaying={item.data.id === currentTrack?.id}
               imageVisible={true}
               rank={item.rank}
               rankVisible={true}
@@ -157,7 +162,7 @@ const ArtistScreen: React.FC<ArtistScreenProps> = props => {
         }
       }
     },
-    [handleAlbumPress, handleShufflePress, handleTrackPress],
+    [handleAlbumPress, handleShufflePress, handleTrackPress, currentTrack],
   );
 
   if (!artist || !topTracks || !albums) {
@@ -251,6 +256,7 @@ const ArtistScreen: React.FC<ArtistScreenProps> = props => {
               styles.list,
               {paddingTop: headerHeight - SPACE_64 - insets.top},
             ]}
+            extraData={{artist, topTracks, albums, currentTrack}}
             scrollEventThrottle={16}
             onScroll={onScrollEvent}
           />

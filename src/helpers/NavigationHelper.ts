@@ -13,6 +13,10 @@ class NavigationHelper {
     navigation.navigate('Artist', {id});
   };
 
+  gotoPlayerScreen = (navigation: StackNavigationProp<any>) => {
+    navigation.navigate('Player');
+  };
+
   gotoAppropriateScreenBasedOnEntity = (
     navigation: StackNavigationProp<any>,
     data: {type: string; id: string},

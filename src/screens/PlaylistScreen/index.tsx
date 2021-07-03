@@ -2,9 +2,9 @@ import React, {useState, useEffect, useRef, useCallback} from 'react';
 import {View, FlatList, StyleSheet, Animated} from 'react-native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {RouteProp} from '@react-navigation/native';
+import {useSelector, useDispatch} from 'react-redux';
 
 import Button from '../../components/Button';
-import SpotifyClient from '../../../SpotifyClient';
 import AnimatedHeader from '../../components/AnimatedHeader';
 import Loader from '../../components/Loader';
 import AnimatedTopBar from '../../components/AnimatedTopBar';
@@ -21,7 +21,8 @@ import {SPACE_24, SPACE_64} from '../../constants/dimens';
 import {COLOR_BACKGROUND, COLOR_TRANSPARENT} from '../../constants/colors';
 import {commas} from '../../helpers/textHelpers';
 import {HomeStackParamList} from '../MainScreen';
-import {IPlaylist} from '../../interfaces/playlist';
+import {RootState} from '../../store';
+import {fetchPlaylist} from '../../slices/playlist';
 
 const ItemType = {
   STICKY_BUTTON: 'STICKY_BUTTON',
@@ -36,7 +37,13 @@ interface PlaylistScreenProps {
 const PlaylistScreen: React.FC<PlaylistScreenProps> = props => {
   const {route, navigation} = props;
   const playlistId = route.params.id;
-  const [playlist, setPlaylist] = useState<IPlaylist>();
+  const dispatch = useDispatch();
+
+  const {playlist, currentTrack} = useSelector((state: RootState) => ({
+    playlist: state.playlist.details[playlistId],
+    currentTrack: state.player.track,
+  }));
+
   const [headerHeight, setHeaderHeight] = useState(10);
   const [dominantColor, setDominantColor] = useState<string>();
   const insets = useSafeAreaInsets();
@@ -57,18 +64,20 @@ const PlaylistScreen: React.FC<PlaylistScreenProps> = props => {
   ).current;
 
   useEffect(() => {
+    dispatch(fetchPlaylist(playlistId));
+  }, [dispatch, navigation, playlistId]);
+
+  useEffect(() => {
     (async () => {
-      try {
-        const res = await SpotifyClient.get(
-          `v1/playlists/${playlistId}?market=IN`,
-        );
-        setPlaylist(res.data);
-        navigation.setOptions({title: res.data.name});
-        const artwork = res.data?.images?.[0]?.url;
-        setDominantColor(await getDominantColor(artwork));
-      } catch (e) {}
+      if (playlist) {
+        const artwork =
+          playlist.images.length > 0 ? playlist.images[0].url : null;
+        if (artwork) {
+          setDominantColor(await getDominantColor(artwork));
+        }
+      }
     })();
-  }, [navigation, playlistId]);
+  }, [playlist]);
 
   const handlePlayPress = useCallback(() => {
     if (playlist) {
@@ -109,6 +118,7 @@ const PlaylistScreen: React.FC<PlaylistScreenProps> = props => {
           return (
             <TrackItem
               data={item.data}
+              isPlaying={item.data.id === currentTrack?.id}
               imageVisible
               onPress={handleTrackPress(item.trackIndex)}
             />
@@ -119,7 +129,7 @@ const PlaylistScreen: React.FC<PlaylistScreenProps> = props => {
         }
       }
     },
-    [handlePlayPress, handleTrackPress],
+    [handlePlayPress, handleTrackPress, currentTrack],
   );
 
   if (!playlist) {
@@ -193,7 +203,7 @@ const PlaylistScreen: React.FC<PlaylistScreenProps> = props => {
           contentContainerStyle={{
             paddingTop: headerHeight - SPACE_64 - insets.top,
           }}
-          extraData={{dominantColor}}
+          extraData={{dominantColor, currentTrack}}
           scrollEventThrottle={16}
           onScroll={onScrollEvent}
         />

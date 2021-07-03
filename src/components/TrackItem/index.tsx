@@ -11,6 +11,7 @@ import Text from '../Text';
 import {
   COLOR_BACKGROUND,
   COLOR_FADED,
+  COLOR_PRIMARY,
   COLOR_TEXT_PRIMARY,
   COLOR_TEXT_SECONDARY,
 } from '../../constants/colors';
@@ -29,6 +30,7 @@ const IMAGE_SIZE = Dimensions.get('window').width * 0.125;
 interface TrackItemProps {
   data: ITrack;
   onPress: () => void;
+  isPlaying?: boolean;
   imageVisible?: boolean;
   rank?: number;
   rankVisible?: boolean;
@@ -38,6 +40,7 @@ interface TrackItemProps {
 const TrackItem: React.FC<TrackItemProps> = ({
   data,
   onPress,
+  isPlaying = false,
   imageVisible = false,
   rank,
   rankVisible = false,
@@ -45,7 +48,7 @@ const TrackItem: React.FC<TrackItemProps> = ({
 }) => {
   const {name, artists, album} = data;
   const artistNames = artists.map(artist => artist.name).join(', ');
-  const imageUrl = getArtwork(album?.images);
+  const imageUrl = getArtwork(album?.images) ?? '-';
 
   return (
     <TouchableOpacity
@@ -64,7 +67,12 @@ const TrackItem: React.FC<TrackItemProps> = ({
       {imageVisible && <Image source={{uri: imageUrl}} style={styles.image} />}
 
       <View style={styles.content}>
-        <Text label={name} as="title5" numberOfLines={1} />
+        <Text
+          label={name}
+          as="title5"
+          style={isPlaying ? styles.titlePlaying : null}
+          numberOfLines={1}
+        />
         <Text
           label={artistNames}
           as="small1"
@@ -100,6 +108,9 @@ const styles = StyleSheet.create({
     height: IMAGE_SIZE,
     borderRadius: SPACE_2,
     marginRight: SPACE_12,
+  },
+  titlePlaying: {
+    color: COLOR_PRIMARY,
   },
   subTitle: {
     color: COLOR_TEXT_SECONDARY,

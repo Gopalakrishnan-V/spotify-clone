@@ -1,15 +1,13 @@
-import React, {useState, useEffect, useContext} from 'react';
+import React from 'react';
 import {StyleSheet, View, Image, TouchableOpacity} from 'react-native';
 import TrackPlayer, {
-  Track,
-  State,
-  TrackPlayerEvents,
-  useTrackPlayerEvents,
   STATE_PLAYING,
   STATE_NONE,
 } from 'react-native-track-player';
 import TextTicker from 'react-native-text-ticker';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {useSelector} from 'react-redux';
+
 import Text from '../Text';
 import {getNavigationRef} from '../../../RootNavigation';
 import {getBottomPlayerImageSize} from '../../helpers/playerHelpers';
@@ -25,17 +23,13 @@ import {
 import {
   COLOR_BLACK,
   COLOR_BOTTOM_BAR,
-  COLOR_TEXT_PRIMARY,
   COLOR_TEXT_SECONDARY,
   COLOR_WHITE,
 } from '../../constants/colors';
 import {FONT_BOLD} from '../../constants';
 import textStyles from '../../constants/textStyles';
-
-const events = [
-  TrackPlayerEvents.PLAYBACK_TRACK_CHANGED,
-  TrackPlayerEvents.PLAYBACK_STATE,
-];
+import {RootState} from '../../store';
+import NavigationHelper from '../../helpers/NavigationHelper';
 
 const IMAGE_SIZE = getBottomPlayerImageSize(Dimensions.get('window').width);
 
@@ -44,45 +38,13 @@ interface BottomPlayerProps {
 }
 
 const BottomPlayer: React.FC<BottomPlayerProps> = props => {
-  const [track, setTrack] = useState<Track>();
-  const [playerState, setPlayerState] = useState<State>();
-
-  useEffect(() => {
-    let mounted = true;
-
-    (async () => {
-      const trackId = await TrackPlayer.getCurrentTrack();
-      if (!mounted || !trackId) return;
-      const [currentTrack, currentPlayerState] = await Promise.all([
-        TrackPlayer.getTrack(trackId),
-        TrackPlayer.getState(),
-      ]);
-      if (mounted) {
-        setTrack(currentTrack);
-        setPlayerState(currentPlayerState);
-      }
-    })();
-
-    return () => {
-      mounted = false;
-    };
-  }, []);
-
-  useTrackPlayerEvents(events, async event => {
-    if (event.type === TrackPlayerEvents.PLAYBACK_TRACK_CHANGED) {
-      try {
-        if (event.nextTrack) {
-          const track = await TrackPlayer.getTrack(event.nextTrack);
-          setTrack(track);
-        }
-      } catch (err) {}
-    } else if (event.type === TrackPlayerEvents.PLAYBACK_STATE) {
-      setPlayerState(event.state);
-    }
-  });
+  const {track, playerState} = useSelector((state: RootState) => ({
+    track: state.player.track,
+    playerState: state.player.state,
+  }));
 
   const handlePlayerPress = () => {
-    getNavigationRef()?.navigate('Player');
+    NavigationHelper.gotoPlayerScreen(getNavigationRef());
   };
 
   if (!track || !playerState || playerState === STATE_NONE) {

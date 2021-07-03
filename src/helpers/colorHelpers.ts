@@ -1,17 +1,25 @@
 import ImageColors from 'react-native-image-colors';
 import {COLOR_BACKGROUND} from '../constants/colors';
 
+const dominantColorCache: {[imageUrl: string]: string | undefined} = {};
 export const getDominantColor = async (
   imageUrl: string,
   fallbackColor?: string,
 ) => {
+  // Checking the cache
+  const cachedColor = dominantColorCache[imageUrl];
+  if (cachedColor) {
+    return cachedColor;
+  }
+
   try {
     const colors = await ImageColors.getColors(imageUrl);
     if (colors.platform === 'android') {
-      return colors.dominant;
+      dominantColorCache[imageUrl] = colors.dominant;
     } else {
-      return colors.detail ?? colors.primary;
+      dominantColorCache[imageUrl] = colors.detail ?? colors.primary;
     }
+    return dominantColorCache[imageUrl];
   } catch (e) {
     return fallbackColor;
   }

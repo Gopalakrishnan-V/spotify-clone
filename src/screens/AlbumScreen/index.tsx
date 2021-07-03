@@ -8,9 +8,9 @@ import {
 } from 'react-native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {RouteProp} from '@react-navigation/native';
+import {useSelector, useDispatch} from 'react-redux';
 
 import Button from '../../components/Button';
-import SpotifyClient from '../../../SpotifyClient';
 import AnimatedHeader from '../../components/AnimatedHeader';
 import Loader from '../../components/Loader';
 import AnimatedTopBar from '../../components/AnimatedTopBar';
@@ -31,8 +31,9 @@ import NavigationHelper from '../../helpers/NavigationHelper';
 import {getYear} from '../../helpers/dateHelpers';
 import {COLOR_BACKGROUND, COLOR_TRANSPARENT} from '../../constants/colors';
 import {HomeStackParamList} from '../MainScreen';
-import {IAlbumDetails} from '../../interfaces/album';
 import {IArtistItem} from '../../interfaces/artist';
+import {fetchAlbumDetails} from '../../slices/album';
+import {RootState} from '../../store';
 
 const ItemType = {
   STICKY_BUTTON: 'STICKY_BUTTON',
@@ -47,9 +48,13 @@ interface AlbumScreenProps {
 const AlbumScreen: React.FC<AlbumScreenProps> = props => {
   const {route, navigation} = props;
   const albumId = route.params.id;
-  const [album, setAlbum] = useState<IAlbumDetails>();
+  const {album, currentTrack} = useSelector((state: RootState) => ({
+    album: state.album.details[albumId],
+    currentTrack: state.player.track,
+  }));
+  const dispatch = useDispatch();
   const [headerHeight, setHeaderHeight] = useState(10);
-  const [dominantColor, setDominantColor] = useState<string | null>();
+  const [dominantColor, setDominantColor] = useState<string>();
   const insets = useSafeAreaInsets();
 
   const animatedOffsetValue = useRef(new Animated.Value(0)).current;
@@ -68,18 +73,19 @@ const AlbumScreen: React.FC<AlbumScreenProps> = props => {
   ).current;
 
   useEffect(() => {
-    (async () => {
-      try {
-        const res = await SpotifyClient.get(`v1/albums/${albumId}?market=IN`);
-        setAlbum(res.data);
-        navigation.setOptions({title: res.data.name});
-        const artwork = res.data?.images?.[0]?.url;
+    dispatch(fetchAlbumDetails(albumId));
+  }, [albumId, dispatch]);
+
+  useEffect(() => {
+    if (album) {
+      (async () => {
+        const artwork = album.images.length > 0 ? album.images[0].url : null;
         if (artwork) {
           setDominantColor(await getDominantColor(artwork));
         }
-      } catch (e) {}
-    })();
-  }, [albumId, navigation]);
+      })();
+    }
+  }, [album]);
 
   const handleShufflePress = useCallback(() => {
     if (album) {
@@ -127,6 +133,7 @@ const AlbumScreen: React.FC<AlbumScreenProps> = props => {
           return (
             <TrackItem
               data={item.data}
+              isPlaying={item.data.id === currentTrack?.id}
               onPress={handleTrackPress(item.trackIndex)}
             />
           );
@@ -136,7 +143,7 @@ const AlbumScreen: React.FC<AlbumScreenProps> = props => {
         }
       }
     },
-    [handleShufflePress, handleTrackPress],
+    [handleShufflePress, handleTrackPress, currentTrack],
   );
 
   if (!album) {
@@ -210,7 +217,7 @@ const AlbumScreen: React.FC<AlbumScreenProps> = props => {
               styles.list,
               {paddingTop: headerHeight - SPACE_64 - insets.top},
             ]}
-            extraData={{dominantColor}}
+            extraData={{dominantColor, currentTrack}}
             scrollEventThrottle={16}
             onScroll={onScrollEvent}
           />

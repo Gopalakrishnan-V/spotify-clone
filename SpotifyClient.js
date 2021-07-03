@@ -15,6 +15,8 @@ const SpotifyClient = applyCaseMiddleware(
   }),
 );
 
+SpotifyClient.interceptors.response.use(response => response.data);
+
 const refreshAuthLogic = async failedRequest => {
   const {payload} = await updateAccessToken();
   if (payload) {

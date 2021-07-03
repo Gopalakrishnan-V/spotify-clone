@@ -64,11 +64,11 @@ type TabParamList = {
 const getTabBarIcon =
   (route: RouteProp<TabParamList, keyof TabParamList>) =>
   (props: {focused: boolean; color: string; size: number}) => {
-    const {focused, color, size} = props;
+    const {color, size} = props;
     let iconName;
 
     if (route.name === 'HomeStack') {
-      iconName = focused ? 'home-variant' : 'home-variant-outline';
+      iconName = 'home-variant';
     } else if (route.name === 'SearchStack') {
       iconName = 'magnify';
     } else {

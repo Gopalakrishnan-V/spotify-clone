@@ -1,13 +1,8 @@
-import React, {useState, useEffect, useCallback} from 'react';
+import React, {useState, useCallback, useEffect} from 'react';
 import {Image, StyleSheet, Dimensions} from 'react-native';
-import TrackPlayer, {
-  Track,
-  State,
-  TrackPlayerEvents,
-  useTrackPlayerEvents,
-  STATE_PLAYING,
-} from 'react-native-track-player';
+import TrackPlayer, {STATE_PLAYING} from 'react-native-track-player';
 import LinearGradient from 'react-native-linear-gradient';
+import {useSelector} from 'react-redux';
 
 import {getDominantColor, getGradientColors} from '../../helpers/colorHelpers';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
@@ -18,11 +13,7 @@ import BottomControls from './BottomControls';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {RootStackParamList} from '../../../Navigator';
 import NavigationHelper from '../../helpers/NavigationHelper';
-
-const events = [
-  TrackPlayerEvents.PLAYBACK_STATE,
-  TrackPlayerEvents.PLAYBACK_ERROR,
-];
+import {RootState} from '../../store';
 
 const IMAGE_SIZE = Dimensions.get('window').width - SPACE_48;
 
@@ -32,92 +23,22 @@ interface PlayerScreenProps {
 
 const PlayerScreen: React.FC<PlayerScreenProps> = props => {
   const {navigation} = props;
-  const [track, setTrack] = useState<Track>();
-  const [playerState, setPlayerState] = useState<State>();
+  const {track, playerState} = useSelector((state: RootState) => ({
+    track: state.player.track,
+    playerState: state.player.state,
+  }));
+
   const [dominantColor, setDominantColor] = useState<string | undefined>(
     COLOR_BACKGROUND,
   );
 
-  const insets = useSafeAreaInsets();
-
   useEffect(() => {
-    let mounted = true;
-
-    // Set the initial track:
-    (async () => {
-      try {
-        const trackId = await TrackPlayer.getCurrentTrack();
-        if (!mounted || !trackId) {
-          return;
-        }
-        const _track = await TrackPlayer.getTrack(trackId);
-        if (!mounted) {
-          return;
-        }
-        setTrack(_track);
-        let _dominantColor = null;
-        if (track?.artwork) {
-          _dominantColor = await getDominantColor(
-            track.artwork,
-            COLOR_BACKGROUND,
-          );
-        }
-
-        if (!mounted) {
-          return;
-        }
-        if (_dominantColor) {
-          setDominantColor(_dominantColor);
-        }
-      } catch (e) {}
-    })();
-
-    // Set the track whenever the track changes:
-    const trackChangedListener = TrackPlayer.addEventListener(
-      'playback-track-changed',
-      async data => {
-        try {
-          if (data.nextTrack) {
-            const _track = await TrackPlayer.getTrack(data.nextTrack);
-            if (!mounted) {
-              return;
-            }
-            setTrack(_track);
-            const _dominantColor = await getDominantColor(
-              _track.artwork,
-              COLOR_BACKGROUND,
-            );
-            if (!mounted) {
-              return;
-            }
-            setDominantColor(_dominantColor);
-          }
-        } catch (err) {}
-      },
-    );
-
-    TrackPlayer.getState().then(_state => {
-      if (!mounted) {
-        return;
-      }
-      setPlayerState(_state);
-    });
-
-    return () => {
-      mounted = false;
-      trackChangedListener.remove();
-    };
-  }, [track?.artwork]);
-
-  useTrackPlayerEvents(events, event => {
-    if (event.type === TrackPlayerEvents.PLAYBACK_ERROR) {
-      console.warn('An error occured while playing the current track.');
+    if (track) {
+      getDominantColor(track.artwork).then(setDominantColor);
     }
-    if (event.type === TrackPlayerEvents.PLAYBACK_STATE) {
-      setPlayerState(event.state);
-    }
-  });
+  }, [track]);
 
+  const insets = useSafeAreaInsets();
   const handleHeaderAlbumPress = useCallback(() => {
     if (track?.albumId) {
       NavigationHelper.gotoAlbumScreen(navigation, track.albumId);
