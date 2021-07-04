@@ -13,7 +13,10 @@ export const getFirstArtistName = (artists: IArtistItem[]) => {
 };
 
 export const getArtwork = (images?: IImage[]) => {
-  return images?.[0]?.url ?? null;
+  if (!images || images.length === 0) {
+    return null;
+  }
+  return images[0].url;
 };
 
 export const convertSpotifyTracksToTrackPlayerTracks = (

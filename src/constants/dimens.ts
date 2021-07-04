@@ -1,4 +1,5 @@
 // Spacing
+export const SPACE_1 = 1;
 export const SPACE_2 = 2;
 export const SPACE_4 = 4;
 export const SPACE_6 = 6;

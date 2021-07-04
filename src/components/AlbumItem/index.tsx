@@ -11,8 +11,10 @@ import {COLOR_BACKGROUND, COLOR_TEXT_SECONDARY} from '../../constants/colors';
 import {SPACE_12, SPACE_16, SPACE_4} from '../../constants/dimens';
 import {getYear} from '../../helpers/dateHelpers';
 import {IAlbumItem} from '../../interfaces/album';
+import {getArtwork} from '../../helpers/spotifyHelpers';
 
 const IMAGE_SIZE = Dimensions.get('window').width * 0.2;
+export const ITEM_SIZE = IMAGE_SIZE + SPACE_12 * 2;
 
 interface AlbumItemProps {
   data: IAlbumItem;
@@ -26,7 +28,7 @@ const AlbumItem: React.FC<AlbumItemProps> = ({
   appendAlbumInSubTitle = true,
 }) => {
   const {name, images, releaseDate} = data;
-  const imageUrl = images.length > 0 ? images[0]?.url : '-';
+  const imageUrl = getArtwork(images) ?? '-';
 
   const releaseYear = getYear(releaseDate);
   const subTitle = `${releaseYear}${appendAlbumInSubTitle ? ' • Album' : ''}`;
@@ -75,4 +77,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AlbumItem;
+export default React.memo(
+  AlbumItem,
+  (prevProps, nextProps) => prevProps.data.id === nextProps.data.id,
+);

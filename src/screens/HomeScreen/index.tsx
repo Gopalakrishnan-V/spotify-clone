@@ -1,16 +1,16 @@
-import React, {useState, useEffect, useCallback} from 'react';
+import React, {useEffect, useCallback} from 'react';
 import {FlatList} from 'react-native';
 import {RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {useSelector, useDispatch} from 'react-redux';
+import {useSelector} from 'react-redux';
 
 import Loader from '../../components/Loader';
 import ScreenWrapper from '../../components/ScreenWrapper';
 import NavigationHelper from '../../helpers/NavigationHelper';
 import {HomeStackParamList} from '../MainScreen';
 import FeedRow from './FeedRow';
-import {RootState} from '../../store';
+import {RootState, useAppDispatch} from '../../store';
 import {fetchFeed} from '../../slices/feed';
 import {SPACE_8} from '../../constants/dimens';
 
@@ -21,7 +21,7 @@ interface HomeScreenProps {
 
 const HomeScreen: React.FC<HomeScreenProps> = ({navigation}) => {
   const feedData = useSelector((state: RootState) => state.feed.data);
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const insets = useSafeAreaInsets();
 

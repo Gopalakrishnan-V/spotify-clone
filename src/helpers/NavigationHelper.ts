@@ -13,6 +13,13 @@ class NavigationHelper {
     navigation.navigate('Artist', {id});
   };
 
+  gotoArtistAlbumsScreen = (
+    navigation: StackNavigationProp<any>,
+    id: string,
+  ) => {
+    navigation.navigate('ArtistAlbums', {id});
+  };
+
   gotoPlayerScreen = (navigation: StackNavigationProp<any>) => {
     navigation.navigate('Player');
   };

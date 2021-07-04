@@ -16,18 +16,22 @@ import {
   COLOR_TEXT_PRIMARY,
   COLOR_TEXT_SECONDARY,
 } from '../../constants/colors';
+import ArtistAlbumsScreen from '../ArtistAlbumsScreen';
 
 export type HomeStackParamList = {
   Home: undefined;
   Album: {id: string};
   Playlist: {id: string};
   Artist: {id: string};
+  ArtistAlbums: {id: string};
 };
 
 const HomeStack = createStackNavigator<HomeStackParamList>();
 const HomeStackScreen = () => {
   return (
-    <HomeStack.Navigator initialRouteName="Home">
+    <HomeStack.Navigator
+      initialRouteName="Home"
+      screenOptions={{headerBackTitle: ''}}>
       <HomeStack.Screen
         name="Home"
         component={HomeScreen}
@@ -50,6 +54,12 @@ const HomeStackScreen = () => {
         component={ArtistScreen}
         getId={({params}) => params.id}
         options={{headerShown: false}}
+      />
+      <HomeStack.Screen
+        name="ArtistAlbums"
+        component={ArtistAlbumsScreen}
+        getId={({params}) => params.id}
+        options={{title: 'Releases'}}
       />
     </HomeStack.Navigator>
   );

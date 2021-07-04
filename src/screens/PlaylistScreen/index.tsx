@@ -2,7 +2,7 @@ import React, {useState, useEffect, useRef, useCallback} from 'react';
 import {View, FlatList, StyleSheet, Animated} from 'react-native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {RouteProp} from '@react-navigation/native';
-import {useSelector, useDispatch} from 'react-redux';
+import {useSelector} from 'react-redux';
 
 import Button from '../../components/Button';
 import AnimatedHeader from '../../components/AnimatedHeader';
@@ -21,7 +21,7 @@ import {SPACE_24, SPACE_64} from '../../constants/dimens';
 import {COLOR_BACKGROUND, COLOR_TRANSPARENT} from '../../constants/colors';
 import {commas} from '../../helpers/textHelpers';
 import {HomeStackParamList} from '../MainScreen';
-import {RootState} from '../../store';
+import {RootState, useAppDispatch} from '../../store';
 import {fetchPlaylist} from '../../slices/playlist';
 
 const ItemType = {
@@ -37,14 +37,14 @@ interface PlaylistScreenProps {
 const PlaylistScreen: React.FC<PlaylistScreenProps> = props => {
   const {route, navigation} = props;
   const playlistId = route.params.id;
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const {playlist, currentTrack} = useSelector((state: RootState) => ({
     playlist: state.playlist.details[playlistId],
     currentTrack: state.player.track,
   }));
 
-  const [headerHeight, setHeaderHeight] = useState(10);
+  const [headerHeight, setHeaderHeight] = useState(240);
   const [dominantColor, setDominantColor] = useState<string>();
   const insets = useSafeAreaInsets();
 
@@ -103,7 +103,7 @@ const PlaylistScreen: React.FC<PlaylistScreenProps> = props => {
   );
 
   const renderItem = useCallback(
-    ({item, index}) => {
+    ({item}) => {
       switch (item.type) {
         case ItemType.STICKY_BUTTON: {
           return (

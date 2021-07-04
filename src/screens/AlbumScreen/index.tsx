@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {RouteProp} from '@react-navigation/native';
-import {useSelector, useDispatch} from 'react-redux';
+import {useSelector} from 'react-redux';
 
 import Button from '../../components/Button';
 import AnimatedHeader from '../../components/AnimatedHeader';
@@ -33,7 +33,7 @@ import {COLOR_BACKGROUND, COLOR_TRANSPARENT} from '../../constants/colors';
 import {HomeStackParamList} from '../MainScreen';
 import {IArtistItem} from '../../interfaces/artist';
 import {fetchAlbumDetails} from '../../slices/album';
-import {RootState} from '../../store';
+import {RootState, useAppDispatch} from '../../store';
 
 const ItemType = {
   STICKY_BUTTON: 'STICKY_BUTTON',
@@ -52,8 +52,8 @@ const AlbumScreen: React.FC<AlbumScreenProps> = props => {
     album: state.album.details[albumId],
     currentTrack: state.player.track,
   }));
-  const dispatch = useDispatch();
-  const [headerHeight, setHeaderHeight] = useState(10);
+  const dispatch = useAppDispatch();
+  const [headerHeight, setHeaderHeight] = useState(0);
   const [dominantColor, setDominantColor] = useState<string>();
   const insets = useSafeAreaInsets();
 
@@ -180,6 +180,14 @@ const AlbumScreen: React.FC<AlbumScreenProps> = props => {
   subTitleParts.push(getYear(album.releaseDate));
   const subTitle = subTitleParts.join(' • ');
   const imageUrl = getArtwork(album.images);
+  const isHeaderHeightCalculated = headerHeight > 0;
+  const listStyle = [
+    styles.list,
+    {
+      paddingTop: headerHeight - SPACE_64 - insets.top,
+      opacity: isHeaderHeightCalculated ? 1 : 0,
+    },
+  ];
 
   return (
     <ScreenWrapper>
@@ -213,10 +221,7 @@ const AlbumScreen: React.FC<AlbumScreenProps> = props => {
             stickyHeaderIndices={[0]}
             alwaysBounceVertical={false}
             showsVerticalScrollIndicator={false}
-            contentContainerStyle={[
-              styles.list,
-              {paddingTop: headerHeight - SPACE_64 - insets.top},
-            ]}
+            contentContainerStyle={listStyle}
             extraData={{dominantColor, currentTrack}}
             scrollEventThrottle={16}
             onScroll={onScrollEvent}

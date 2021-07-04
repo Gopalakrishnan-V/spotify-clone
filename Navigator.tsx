@@ -6,13 +6,13 @@ import LoaderScreen from './src/screens/LoaderScreen';
 import MainScreen from './src/screens/MainScreen';
 import PlayerScreen from './src/screens/PlayerScreen';
 import {navigationRef} from './RootNavigation';
-import {COLOR_PRIMARY, COLOR_TEXT_PRIMARY} from './src/constants/colors';
+import {COLOR_TEXT_PRIMARY, COLOR_WHITE} from './src/constants/colors';
 
 const myTheme = {
   ...DarkTheme,
   colors: {
     ...DarkTheme.colors,
-    primary: COLOR_PRIMARY,
+    primary: COLOR_WHITE,
     text: COLOR_TEXT_PRIMARY,
   },
 };

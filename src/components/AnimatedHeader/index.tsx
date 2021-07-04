@@ -15,6 +15,7 @@ import {
   SPACE_48,
   SPACE_64,
   SPACE_8,
+  TEXT_SMALL_2_LINE_HEIGHT,
   TEXT_SMALL_2_SIZE,
 } from '../../constants/dimens';
 import {COLOR_TEXT_SECONDARY} from '../../constants/colors';
@@ -120,5 +121,6 @@ const styles = StyleSheet.create({
   },
   artistSubTitle: {
     fontSize: TEXT_SMALL_2_SIZE,
+    lineHeight: TEXT_SMALL_2_LINE_HEIGHT,
   },
 });

@@ -1,8 +1,14 @@
 import React, {useState, useEffect, useRef, useCallback} from 'react';
-import {View, FlatList, StyleSheet, Animated} from 'react-native';
+import {
+  View,
+  FlatList,
+  StyleSheet,
+  Animated,
+  TouchableOpacity,
+} from 'react-native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {RouteProp} from '@react-navigation/native';
-import {useSelector, useDispatch} from 'react-redux';
+import {useSelector} from 'react-redux';
 
 import Text from '../../components/Text';
 import Button from '../../components/Button';
@@ -17,8 +23,10 @@ import {convertSpotifyTracksToTrackPlayerTracks} from '../../helpers/spotifyHelp
 import ScreenWrapper from '../../components/ScreenWrapper';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {
+  SPACE_1,
   SPACE_16,
   SPACE_24,
+  SPACE_32,
   SPACE_4,
   SPACE_48,
   SPACE_64,
@@ -26,9 +34,13 @@ import {
 } from '../../constants/dimens';
 import {commas} from '../../helpers/textHelpers';
 import NavigationHelper from '../../helpers/NavigationHelper';
-import {COLOR_BACKGROUND, COLOR_TRANSPARENT} from '../../constants/colors';
+import {
+  COLOR_BACKGROUND,
+  COLOR_BORDER,
+  COLOR_TRANSPARENT,
+} from '../../constants/colors';
 import {HomeStackParamList} from '../MainScreen';
-import {RootState} from '../../store';
+import {RootState, useAppDispatch} from '../../store';
 import {
   fetchArtistAlbums,
   fetchArtistDetails,
@@ -41,6 +53,7 @@ const ItemType = {
   SECTION_HEADER: 'SECTION_HEADER',
   TRACK: 'TRACK',
   ALBUM: 'ALBUM',
+  DISCOGRAPHY_BUTTON: 'DISCOGRAPHY_BUTTON',
 };
 
 interface ArtistScreenProps {
@@ -51,7 +64,7 @@ interface ArtistScreenProps {
 const ArtistScreen: React.FC<ArtistScreenProps> = props => {
   const {route, navigation} = props;
   const artistId = route.params.id;
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const {artist, topTracks, albums, currentTrack} = useSelector(
     (state: RootState) => {
@@ -97,7 +110,7 @@ const ArtistScreen: React.FC<ArtistScreenProps> = props => {
         shuffleArray(convertSpotifyTracksToTrackPlayerTracks(topTracks.tracks)),
       );
     }
-  }, [topTracks?.tracks]);
+  }, [topTracks]);
 
   const handleTrackPress = useCallback(
     trackIndex => async () => {
@@ -109,12 +122,17 @@ const ArtistScreen: React.FC<ArtistScreenProps> = props => {
         );
       }
     },
-    [topTracks?.tracks],
+    [topTracks],
   );
 
   const handleAlbumPress = useCallback(
     item => () => NavigationHelper.gotoAlbumScreen(navigation, item.id),
     [navigation],
+  );
+
+  const handleDiscographyPress = useCallback(
+    () => NavigationHelper.gotoArtistAlbumsScreen(navigation, artistId),
+    [navigation, artistId],
   );
 
   const renderItem = useCallback(
@@ -157,12 +175,27 @@ const ArtistScreen: React.FC<ArtistScreenProps> = props => {
             <AlbumItem data={item.data} onPress={handleAlbumPress(item.data)} />
           );
         }
+        case ItemType.DISCOGRAPHY_BUTTON: {
+          return (
+            <TouchableOpacity
+              onPress={handleDiscographyPress}
+              style={styles.discographyButton}>
+              <Text label="See discography" as="title6" />
+            </TouchableOpacity>
+          );
+        }
         default: {
           return null;
         }
       }
     },
-    [handleAlbumPress, handleShufflePress, handleTrackPress, currentTrack],
+    [
+      currentTrack?.id,
+      handleShufflePress,
+      handleTrackPress,
+      handleAlbumPress,
+      handleDiscographyPress,
+    ],
   );
 
   if (!artist || !topTracks || !albums) {
@@ -214,9 +247,12 @@ const ArtistScreen: React.FC<ArtistScreenProps> = props => {
       {
         type: ItemType.SECTION_HEADER,
         title: 'Releases',
-        style: {marginTop: 24},
+        style: {marginTop: SPACE_24},
       },
       ...albumItems,
+      {
+        type: ItemType.DISCOGRAPHY_BUTTON,
+      },
     );
   }
   const subTitle = `${commas(followers.total)} MONTHLY LISTENERS`;
@@ -301,5 +337,15 @@ const styles = StyleSheet.create({
   trackItem: {
     paddingTop: SPACE_8,
     paddingBottom: SPACE_8,
+  },
+  discographyButton: {
+    alignSelf: 'center',
+    marginTop: SPACE_8,
+    marginBottom: SPACE_32,
+    paddingHorizontal: SPACE_24,
+    paddingVertical: SPACE_4,
+    borderWidth: SPACE_1,
+    borderRadius: SPACE_16,
+    borderColor: COLOR_BORDER,
   },
 });
