@@ -13,11 +13,11 @@
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
-		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
-		CE7C93E3267A66C70021777A /* libswiftWebKit.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = CE7C93E2267A66C70021777A /* libswiftWebKit.tbd */; };
-		816D5FCB0F5A4EE3AAA8E75F /* Circular Std Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A1E41C623FEC4EB3A0AF5FED /* Circular Std Bold.ttf */; };
 		3FCDEACE0FC4453DBAC32081 /* Circular Std Book.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A42E48D1D2DE40089642B908 /* Circular Std Book.ttf */; };
+		816D5FCB0F5A4EE3AAA8E75F /* Circular Std Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A1E41C623FEC4EB3A0AF5FED /* Circular Std Bold.ttf */; };
+		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		AE5E884DE2684FDF849F8151 /* Circular Std Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 53D86182509E41FFB43DDB8B /* Circular Std Medium.ttf */; };
+		CE7C93E3267A66C70021777A /* libswiftWebKit.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = CE7C93E2267A66C70021777A /* libswiftWebKit.tbd */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -46,6 +46,7 @@
 		346504178DEB4B17899165C9 /* FontAwesome5_Brands.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Brands.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Brands.ttf"; sourceTree = "<group>"; };
 		3BDFFA4A09394E8C856859E5 /* MaterialCommunityIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialCommunityIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialCommunityIcons.ttf"; sourceTree = "<group>"; };
 		47836B7F86C045019FE9E70A /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = SimpleLineIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/SimpleLineIcons.ttf"; sourceTree = "<group>"; };
+		53D86182509E41FFB43DDB8B /* Circular Std Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Circular Std Medium.ttf"; path = "../assets/fonts/Circular Std Medium.ttf"; sourceTree = "<group>"; };
 		5A6C4E01D50C509B0E6ED990 /* libPods-SpotifyClone.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SpotifyClone.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6987B14EB49D400E8AAC3C24 /* EvilIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = EvilIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/EvilIcons.ttf"; sourceTree = "<group>"; };
 		6E1E539D0FEB9F88F8397BB6 /* Pods-SpotifyClone.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SpotifyClone.release.xcconfig"; path = "Target Support Files/Pods-SpotifyClone/Pods-SpotifyClone.release.xcconfig"; sourceTree = "<group>"; };
@@ -56,7 +57,9 @@
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = SpotifyClone/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		856BA8CDC59F49CBB2A3139D /* FontAwesome.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome.ttf"; sourceTree = "<group>"; };
 		8FBBDF69D1254572BA4DF3BB /* FontAwesome5_Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Regular.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Regular.ttf"; sourceTree = "<group>"; };
+		A1E41C623FEC4EB3A0AF5FED /* Circular Std Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Circular Std Bold.ttf"; path = "../assets/fonts/Circular Std Bold.ttf"; sourceTree = "<group>"; };
 		A2F25F00A1E148AB91FF9431 /* Foundation.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Foundation.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Foundation.ttf"; sourceTree = "<group>"; };
+		A42E48D1D2DE40089642B908 /* Circular Std Book.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Circular Std Book.ttf"; path = "../assets/fonts/Circular Std Book.ttf"; sourceTree = "<group>"; };
 		AE7555DB4A574B33963DEC12 /* Zocial.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Zocial.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Zocial.ttf"; sourceTree = "<group>"; };
 		C548E1C47323FF2B8B6A3518 /* libPods-SpotifyClone-SpotifyCloneTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SpotifyClone-SpotifyCloneTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CE7C93E2267A66C70021777A /* libswiftWebKit.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libswiftWebKit.tbd; path = usr/lib/swift/libswiftWebKit.tbd; sourceTree = SDKROOT; };
@@ -65,9 +68,6 @@
 		E74321265AC14558AC104CBF /* Ionicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Ionicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Ionicons.ttf"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		F8B5CB735F1F46C285987B44 /* Feather.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Feather.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Feather.ttf"; sourceTree = "<group>"; };
-		A1E41C623FEC4EB3A0AF5FED /* Circular Std Bold.ttf */ = {isa = PBXFileReference; name = "Circular Std Bold.ttf"; path = "../assets/fonts/Circular Std Bold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		A42E48D1D2DE40089642B908 /* Circular Std Book.ttf */ = {isa = PBXFileReference; name = "Circular Std Book.ttf"; path = "../assets/fonts/Circular Std Book.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		53D86182509E41FFB43DDB8B /* Circular Std Medium.ttf */ = {isa = PBXFileReference; name = "Circular Std Medium.ttf"; path = "../assets/fonts/Circular Std Medium.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */

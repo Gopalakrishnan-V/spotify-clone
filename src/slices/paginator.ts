@@ -1,6 +1,7 @@
 import {createAction, createReducer, Dispatch} from '@reduxjs/toolkit';
 import SpotifyClient from '../../SpotifyClient';
 import {IAlbumItem} from '../interfaces/album';
+import { ICategoryItem, ICategoryPlaylistItem } from '../interfaces/category';
 import {RootState} from '../store';
 
 interface IPageData<T> {
@@ -10,7 +11,7 @@ interface IPageData<T> {
   total: number;
 }
 
-interface IPaginatedData<T> {
+export interface IPaginatedData<T> {
   items: T[];
   pages: IPageData<T>[];
   next: string | null;
@@ -40,23 +41,29 @@ const fetchPage = async (
   dispatch: Dispatch,
   getState: () => RootState,
 ) => {
-  const {initialUrl, isFirstPage} = config;
-  const nextUrl = getState().paginator.artistAlbums[config.resultKey]?.next;
+  const {initialUrl, isFirstPage, entityKey} = config;
+  const nextUrl = getState().paginator.[config.entityKey].[config.resultKey]?.next;
 
   const url = isFirstPage || !nextUrl ? initialUrl : nextUrl;
   const meta = {...config, isFirstPage: isFirstPage || !nextUrl};
 
   try {
     dispatch(fetchPagePending(config));
+    const response: any = await SpotifyClient.get(url)
+    let pageData: IPageData<any> = response.categories
+    if(entityKey === "categories"){
+      pageData = response.categories
+    } else if(entityKey === "categoryPlaylists"){
+      pageData = response.playlists
+    }
 
-    const response: IPageData<any> = await SpotifyClient.get(url);
     dispatch(
       fetchPageFulfilled({
         meta,
-        payload: response,
+        payload: pageData,
       }),
     );
-    return {meta, payload: response};
+    return {meta, payload: pageData};
   } catch (error) {
     const newError = error.response.data
       ? {response: {data: error.response.data}}
@@ -67,13 +74,21 @@ const fetchPage = async (
 };
 
 interface PaginatorState {
-  [key: string]: {
+  artistAlbums: {
     [key: string]: IPaginatedData<IAlbumItem> | undefined;
+  };
+  categories: {
+    [key: string]: IPaginatedData<ICategoryItem>| undefined;
+  };
+  categoryPlaylists: {
+    [key: string]: IPaginatedData<ICategoryPlaylistItem>| undefined;
   };
 }
 
 const initialState: PaginatorState = {
   artistAlbums: {},
+  categories: {},
+  categoryPlaylists: {},
 };
 
 export default createReducer(initialState, builder => {
@@ -98,8 +113,8 @@ export default createReducer(initialState, builder => {
       const {isFirstPage} = meta;
       const oldPaginatedData = state[meta.entityKey][meta.resultKey];
       const newItems = isFirstPage
-        ? payload.items
-        : oldPaginatedData!.items.concat(...payload.items);
+        ? payload.items.filter(item => !!item)
+        : oldPaginatedData!.items.concat(...payload.items.filter(item => !!item));
       const newPages = isFirstPage
         ? [payload]
         : oldPaginatedData!.pages.concat(payload);
@@ -121,6 +136,34 @@ export const fetchArtistAlbums = (id: string, isFirstPage: boolean) => {
   const initialUrl = `v1/artists/${id}/albums?market=IN&limit=50`;
   const config: IPagingConfig = {
     entityKey: 'artistAlbums',
+    resultKey: id,
+    isFirstPage,
+    initialUrl,
+  };
+
+  return (dispatch: Dispatch, getState: () => RootState) => {
+    return fetchPage(config, dispatch, getState);
+  };
+};
+
+export const fetchCategories = (isFirstPage: boolean) => {
+  const initialUrl = 'v1/browse/categories?country=IN';
+  const config: IPagingConfig = {
+    entityKey: 'categories',
+    resultKey: '-',
+    isFirstPage,
+    initialUrl,
+  };
+
+  return (dispatch: Dispatch, getState: () => RootState) => {
+    return fetchPage(config, dispatch, getState);
+  };
+};
+
+export const fetchCategoryPlaylists = (id: string, isFirstPage: boolean) => {
+  const initialUrl = `v1/browse/categories/${id}/playlists/?country=IN`;
+  const config: IPagingConfig = {
+    entityKey: 'categoryPlaylists',
     resultKey: id,
     isFirstPage,
     initialUrl,

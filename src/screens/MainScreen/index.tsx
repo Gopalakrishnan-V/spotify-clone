@@ -17,6 +17,7 @@ import {
   COLOR_TEXT_SECONDARY,
 } from '../../constants/colors';
 import ArtistAlbumsScreen from '../ArtistAlbumsScreen';
+import CategoryPlaylistsScreen from '../CategoryPlaylistsScreen';
 
 export type HomeStackParamList = {
   Home: undefined;
@@ -65,6 +66,42 @@ const HomeStackScreen = () => {
   );
 };
 
+export type SearchStackParamList = {
+  Search: undefined;
+  CategoryPlaylists: {id: string; name: string};
+  Playlist: {id: string};
+};
+const SearchStack = createStackNavigator<SearchStackParamList>();
+const SearchStackScreen = () => {
+  return (
+    <SearchStack.Navigator
+      initialRouteName="Search"
+      screenOptions={{headerBackTitle: ''}}>
+      <SearchStack.Screen
+        name="Search"
+        component={SearchScreen}
+        options={{headerShown: false}}
+      />
+      <SearchStack.Screen
+        name="CategoryPlaylists"
+        component={CategoryPlaylistsScreen}
+        getId={({params}) => params.id}
+        options={({route: {params}}) => ({
+          headerShown: true,
+          title: params.name || '',
+          headerBackTitleVisible: false,
+        })}
+      />
+      <SearchStack.Screen
+        name="Playlist"
+        component={PlaylistScreen}
+        getId={({params}) => params.id}
+        options={{headerShown: false}}
+      />
+    </SearchStack.Navigator>
+  );
+};
+
 type TabParamList = {
   HomeStack: undefined;
   SearchStack: undefined;
@@ -101,7 +138,8 @@ const MainScreen = () => {
         inactiveTintColor: COLOR_TEXT_SECONDARY,
         style: {backgroundColor: COLOR_BOTTOM_BAR},
       }}
-      tabBar={props => <TabBarWithPlayer {...props} />}>
+      tabBar={props => <TabBarWithPlayer {...props} />}
+      initialRouteName={'SearchStack'}>
       <Tab.Screen
         name="HomeStack"
         component={HomeStackScreen}
@@ -109,7 +147,7 @@ const MainScreen = () => {
       />
       <Tab.Screen
         name="SearchStack"
-        component={SearchScreen}
+        component={SearchStackScreen}
         options={{title: 'Search'}}
       />
       <Tab.Screen

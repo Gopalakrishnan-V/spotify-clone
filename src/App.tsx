@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
 import React from 'react';
-import {StyleSheet, View} from 'react-native';
+import {StatusBar, StyleSheet, View} from 'react-native';
 import TrackPlayer, {
   TrackPlayerEvents,
   useTrackPlayerEvents,
@@ -39,6 +39,7 @@ const App: React.FC = () => {
 
   return (
     <Provider store={store}>
+      <StatusBar barStyle={'light-content'} />
       <View style={styles.container}>
         <Navigator />
       </View>
