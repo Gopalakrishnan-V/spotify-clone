@@ -18,6 +18,7 @@ import {
 } from '../../constants/colors';
 import ArtistAlbumsScreen from '../ArtistAlbumsScreen';
 import CategoryPlaylistsScreen from '../CategoryPlaylistsScreen';
+import SearchResultsScreen from '../SearchResultsScreen';
 
 export type HomeStackParamList = {
   Home: undefined;
@@ -68,6 +69,7 @@ const HomeStackScreen = () => {
 
 export type SearchStackParamList = {
   Search: undefined;
+  SearchResults: undefined;
   CategoryPlaylists: {id: string; name: string};
   Playlist: {id: string};
 };
@@ -80,6 +82,11 @@ const SearchStackScreen = () => {
       <SearchStack.Screen
         name="Search"
         component={SearchScreen}
+        options={{headerShown: false}}
+      />
+      <SearchStack.Screen
+        name="SearchResults"
+        component={SearchResultsScreen}
         options={{headerShown: false}}
       />
       <SearchStack.Screen

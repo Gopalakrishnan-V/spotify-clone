@@ -47,7 +47,9 @@ const SearchScreen: React.FC<SearchScreenProps> = props => {
     }
   }, [categories, dispatch]);
 
-  const handleSearchPress = useCallback(() => {}, []);
+  const handleSearchPress = useCallback(() => {
+    NavigationHelper.gotoSearchResultsScreen(navigation);
+  }, [navigation]);
 
   const handleCategoryPress = useCallback(
     (item: ICategoryItem) => () => {
@@ -64,6 +66,7 @@ const SearchScreen: React.FC<SearchScreenProps> = props => {
     const backgroundColor = getCategoryColor(index);
     return (
       <CategoryItem
+        key={String(index)}
         data={item}
         onPress={handleCategoryPress(item)}
         backgroundColor={backgroundColor}
@@ -74,32 +77,18 @@ const SearchScreen: React.FC<SearchScreenProps> = props => {
   const renderItem = ({item, index}: {item: any; index: number}) => {
     switch (item.type) {
       case 'title': {
-        return (
-          <Text
-            key={item.type}
-            label="Search"
-            as="title3"
-            style={styles.title}
-          />
-        );
+        return <Text label="Search" as="title3" style={styles.title} />;
       }
       case 'searchBar': {
-        return <StaticSearchBar key={item.type} onPress={handleSearchPress} />;
+        return <StaticSearchBar onPress={handleSearchPress} />;
       }
       case 'listTitle': {
-        return (
-          <Text
-            key={item.type}
-            label="Browse all"
-            as="title4"
-            style={styles.browseAll}
-          />
-        );
+        return <Text label="Browse all" as="title4" style={styles.browseAll} />;
       }
       default: {
         const [first, second] = item;
         return (
-          <View key={String(index)} style={styles.categoriesRow}>
+          <View style={styles.categoriesRow}>
             {renderCategoryItem(first, index * 2)}
             <View style={styles.categoriesDivider} />
             {second ? (
@@ -123,6 +112,7 @@ const SearchScreen: React.FC<SearchScreenProps> = props => {
       <FlatList
         data={data}
         renderItem={renderItem}
+        keyExtractor={(_, index) => String(index)}
         stickyHeaderIndices={[1]}
         showsVerticalScrollIndicator={true}
         contentContainerStyle={styles.list}

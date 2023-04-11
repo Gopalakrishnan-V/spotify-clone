@@ -50,7 +50,7 @@ const fetchPage = async (
   try {
     dispatch(fetchPagePending(config));
     const response: any = await SpotifyClient.get(url)
-    let pageData: IPageData<any> = response.categories
+    let pageData: IPageData<any> = response
     if(entityKey === "categories"){
       pageData = response.categories
     } else if(entityKey === "categoryPlaylists"){
