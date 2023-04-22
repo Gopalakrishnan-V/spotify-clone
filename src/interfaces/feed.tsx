@@ -1,21 +1,14 @@
-export interface IFeedResponse {
-  data: IFeedItem[];
+import {IAlbumItem} from './album';
+import {ICategoryPlaylistItem} from './category';
+
+export interface IFeedItemDataSource {
+  type: 'album' | 'playlist';
+  title: string;
+  url: string;
 }
 
 export interface IFeedItem {
-  itemType: string;
-  id?: string | null;
-  type?: string | null;
-  title?: string | null;
-  subTitle?: string | null;
-  imageUrl?: string | null;
-  data: IFeedRowItem[];
-}
-
-export interface IFeedRowItem {
-  id?: string | null;
-  type?: string | null;
-  title?: string | null;
-  subTitle?: string | null;
-  imageUrl: string;
+  type: 'album' | 'playlist';
+  title: string;
+  data: IAlbumItem[] | ICategoryPlaylistItem[];
 }
