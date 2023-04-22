@@ -167,7 +167,7 @@ const MainScreen = () => {
         style: {backgroundColor: COLOR_BOTTOM_BAR},
       }}
       tabBar={props => <TabBarWithPlayer {...props} />}
-      initialRouteName={'SearchStack'}>
+      initialRouteName={'HomeStack'}>
       <Tab.Screen
         name="HomeStack"
         component={HomeStackScreen}

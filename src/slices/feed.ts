@@ -1,20 +1,25 @@
 import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
 import SpotifyClient from '../../SpotifyClient';
-import {IFeedResponse} from '../interfaces/feed';
-
-const FEED_URL =
-  'https://firebasestorage.googleapis.com/v0/b/sample-a8754.appspot.com/o/p%2Fspotify%2Fapi%2Ffeed%2F1.json?alt=media&token=fe70d811-cc7b-4147-a0ca-4a1fa6fd54e1';
+import {IFeedItem, IFeedItemDataSource} from '../interfaces/feed';
+import {convertResponseItemsToFeedItems} from '../helpers/feedHelpers';
 
 export const fetchFeed = createAsyncThunk(
   'feed/fetchFeed',
-  (): Promise<IFeedResponse> => SpotifyClient.get(FEED_URL),
+  (arg: {page: Number; dataSources: IFeedItemDataSource[]}): Promise<any[]> => {
+    const promises = [];
+    for (let dataSource of arg.dataSources) {
+      promises.push(SpotifyClient.get(dataSource.url));
+    }
+    return Promise.all(promises);
+  },
 );
-
 interface FeedState {
-  data: IFeedResponse | null;
+  isLoading: Boolean;
+  data: IFeedItem[] | null;
 }
 
 const initialState: FeedState = {
+  isLoading: false,
   data: null,
 };
 
@@ -23,8 +28,25 @@ export const feedSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: builder => {
+    builder.addCase(fetchFeed.pending, state => {
+      state.isLoading = true;
+    });
     builder.addCase(fetchFeed.fulfilled, (state, action) => {
-      state.data = action.payload;
+      const {page, dataSources} = action.meta.arg;
+      const responses = action.payload;
+      state.isLoading = false;
+      const newFeedItems = convertResponseItemsToFeedItems(
+        responses,
+        dataSources,
+      );
+      if (page === 1) {
+        state.data = newFeedItems;
+      } else {
+        state.data?.push(...newFeedItems);
+      }
+    });
+    builder.addCase(fetchFeed.rejected, state => {
+      state.isLoading = false;
     });
   },
 });
