@@ -30,6 +30,7 @@ const SearchBar: React.FC<SearchBarProps> = props => {
         placeholder={'What do you want to listen to?'}
         placeholderTextColor={COLOR_TEXT_SECONDARY}
         value={query}
+        autoFocus={true}
         autoCapitalize={'none'}
         onChangeText={onQueryChange}
         style={[textStyles.title6, styles.input]}

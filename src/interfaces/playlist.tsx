@@ -12,3 +12,9 @@ export interface IPlaylist {
   };
   images: IImage[];
 }
+
+export interface IPlaylistItem {
+  id: string;
+  name: string;
+  images: IImage[];
+}

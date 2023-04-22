@@ -70,8 +70,11 @@ const HomeStackScreen = () => {
 export type SearchStackParamList = {
   Search: undefined;
   SearchResults: undefined;
+  Album: {id: string};
   CategoryPlaylists: {id: string; name: string};
   Playlist: {id: string};
+  Artist: {id: string};
+  ArtistAlbums: {id: string};
 };
 const SearchStack = createStackNavigator<SearchStackParamList>();
 const SearchStackScreen = () => {
@@ -90,6 +93,12 @@ const SearchStackScreen = () => {
         options={{headerShown: false}}
       />
       <SearchStack.Screen
+        name="Album"
+        component={AlbumScreen}
+        getId={({params}) => params.id}
+        options={{headerShown: false}}
+      />
+      <SearchStack.Screen
         name="CategoryPlaylists"
         component={CategoryPlaylistsScreen}
         getId={({params}) => params.id}
@@ -104,6 +113,18 @@ const SearchStackScreen = () => {
         component={PlaylistScreen}
         getId={({params}) => params.id}
         options={{headerShown: false}}
+      />
+      <SearchStack.Screen
+        name="Artist"
+        component={ArtistScreen}
+        getId={({params}) => params.id}
+        options={{headerShown: false}}
+      />
+      <SearchStack.Screen
+        name="ArtistAlbums"
+        component={ArtistAlbumsScreen}
+        getId={({params}) => params.id}
+        options={{title: 'Releases'}}
       />
     </SearchStack.Navigator>
   );

@@ -1,9 +1,11 @@
 import React from 'react';
-import {StyleSheet, View} from 'react-native';
+import {Dimensions, StyleSheet, View} from 'react-native';
 
 import {SPACE_32, SPACE_8} from '../../constants/dimens';
 import Text from '../../components/Text';
 import {COLOR_TEXT_SECONDARY} from '../../constants/colors';
+
+const HEIGHT = Dimensions.get('screen').height * 0.7;
 
 interface EmptyStateProps {
   title: string;
@@ -23,7 +25,7 @@ const EmptyState: React.FC<EmptyStateProps> = props => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    height: HEIGHT,
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: SPACE_32,

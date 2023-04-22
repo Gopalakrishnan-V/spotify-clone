@@ -19,6 +19,7 @@ export interface IAlbumItem {
   name: string;
   images: IImage[];
   releaseDate: string;
+  artists?: IArtistItem[];
 }
 
 interface ICopyright {
