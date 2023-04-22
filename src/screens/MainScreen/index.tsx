@@ -18,6 +18,7 @@ import {
 } from '../../constants/colors';
 import ArtistAlbumsScreen from '../ArtistAlbumsScreen';
 import CategoryPlaylistsScreen from '../CategoryPlaylistsScreen';
+import SearchResultsScreen from '../SearchResultsScreen';
 
 export type HomeStackParamList = {
   Home: undefined;
@@ -68,8 +69,12 @@ const HomeStackScreen = () => {
 
 export type SearchStackParamList = {
   Search: undefined;
+  SearchResults: undefined;
+  Album: {id: string};
   CategoryPlaylists: {id: string; name: string};
   Playlist: {id: string};
+  Artist: {id: string};
+  ArtistAlbums: {id: string};
 };
 const SearchStack = createStackNavigator<SearchStackParamList>();
 const SearchStackScreen = () => {
@@ -80,6 +85,17 @@ const SearchStackScreen = () => {
       <SearchStack.Screen
         name="Search"
         component={SearchScreen}
+        options={{headerShown: false}}
+      />
+      <SearchStack.Screen
+        name="SearchResults"
+        component={SearchResultsScreen}
+        options={{headerShown: false}}
+      />
+      <SearchStack.Screen
+        name="Album"
+        component={AlbumScreen}
+        getId={({params}) => params.id}
         options={{headerShown: false}}
       />
       <SearchStack.Screen
@@ -97,6 +113,18 @@ const SearchStackScreen = () => {
         component={PlaylistScreen}
         getId={({params}) => params.id}
         options={{headerShown: false}}
+      />
+      <SearchStack.Screen
+        name="Artist"
+        component={ArtistScreen}
+        getId={({params}) => params.id}
+        options={{headerShown: false}}
+      />
+      <SearchStack.Screen
+        name="ArtistAlbums"
+        component={ArtistAlbumsScreen}
+        getId={({params}) => params.id}
+        options={{title: 'Releases'}}
       />
     </SearchStack.Navigator>
   );

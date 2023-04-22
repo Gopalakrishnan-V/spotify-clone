@@ -28,6 +28,10 @@ class NavigationHelper {
     navigation.navigate('CategoryPlaylists', {id, name});
   };
 
+  gotoSearchResultsScreen = (navigation: StackNavigationProp<any>) => {
+    navigation.navigate('SearchResults');
+  };
+
   gotoPlayerScreen = (navigation: StackNavigationProp<any>) => {
     navigation.navigate('Player');
   };
