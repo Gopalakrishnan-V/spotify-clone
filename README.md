@@ -8,6 +8,9 @@ Fully functioning Spotify clone app using React Native, TypeScript, Redux Toolki
 - Background audio playback
 - Cross platform: Android, iOS
 
+## Download APK
+Download and try the latest apk from [here](https://github.com/Gopalakrishnan-V/spotify-clone/releases)
+
 ## Environment Variables
 To run this project, you will need to add the following environment variables to your .env file
 
