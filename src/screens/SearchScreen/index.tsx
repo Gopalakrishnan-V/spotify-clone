@@ -114,7 +114,7 @@ const SearchScreen: React.FC<SearchScreenProps> = props => {
         renderItem={renderItem}
         keyExtractor={(_, index) => String(index)}
         stickyHeaderIndices={[1]}
-        showsVerticalScrollIndicator={true}
+        showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.list}
         onEndReached={handleLoadMore}
         onEndReachedThreshold={0.8}

@@ -1,5 +1,5 @@
 import React, {useState, useCallback, useEffect} from 'react';
-import {Image, StyleSheet, Dimensions} from 'react-native';
+import {Image, StyleSheet, Dimensions, Platform} from 'react-native';
 import TrackPlayer, {STATE_PLAYING} from 'react-native-track-player';
 import LinearGradient from 'react-native-linear-gradient';
 import {useSelector} from 'react-redux';
@@ -7,7 +7,7 @@ import {useSelector} from 'react-redux';
 import {getDominantColor, getGradientColors} from '../../helpers/colorHelpers';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {COLOR_BACKGROUND} from '../../constants/colors';
-import {SPACE_24, SPACE_48, SPACE_8} from '../../constants/dimens';
+import {SPACE_16, SPACE_24, SPACE_48, SPACE_8} from '../../constants/dimens';
 import Header from './Header';
 import BottomControls from './BottomControls';
 import {StackNavigationProp} from '@react-navigation/stack';
@@ -55,7 +55,9 @@ const PlayerScreen: React.FC<PlayerScreenProps> = props => {
     styles.container,
     {paddingBottom: insets.bottom + SPACE_8},
   ];
-  const topBarStyle = {marginTop: insets.top};
+  const topBarStyle = {
+    marginTop: insets.top + (Platform.OS === 'android' ? SPACE_16 : 0),
+  };
 
   const colors = getGradientColors(dominantColor);
 
