@@ -23,12 +23,9 @@ To run this project, you will need to add the following environment variables to
 * Assign the value created from previous step to `BASE_64_CLIENT_ID_SECRET` in .env file
 
 ## Demo
-<img src="https://i.ibb.co/GTdRR1n/1.png" width=300/>
-<img src="https://i.ibb.co/V3CTdZs/2.png" width=300/>
-<img src="https://i.ibb.co/TKYspQL/3.png" width=300/>
-<img src="https://i.ibb.co/vhFcB9J/4.png" width=300/>
-<img src="https://i.ibb.co/WxLqfRR/5.png" width=300/>
-<img src="https://i.ibb.co/pP3kvTC/6.png" width=300/>
-<img src="https://i.ibb.co/fdQQSCd/7.png" width=300/>
-<img src="https://i.ibb.co/zsP7nS0/8.png" width=300/>
-<img src="https://i.ibb.co/XVcSbSJ/9.png" width=300/>
+<img src="https://i.ibb.co/SQqvdNn/1.png" width=300/>
+<img src="https://i.ibb.co/3r0Q1Zp/2.png" width=300/>
+<img src="https://i.ibb.co/MPv7C57/4.png" width=300/>
+<img src="https://i.ibb.co/BL5NDJ5/5.png" width=300/>
+<img src="https://i.ibb.co/gJNmj12/6.png" width=300/>
+<img src="https://i.ibb.co/HdSqw43/7.png" width=300/>
