@@ -1,6 +1,6 @@
 import {IFeedItemDataSource} from '../interfaces/feed';
 
-export const FEED_PAGE_LIMIT = 3;
+export const FEED_PAGE_LIMIT = 1;
 
 export const FEED_ITEMS_SOURCE: IFeedItemDataSource[] = [
   {
