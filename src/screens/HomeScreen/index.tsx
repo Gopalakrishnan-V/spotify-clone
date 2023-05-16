@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {useSelector} from 'react-redux';
@@ -9,7 +9,7 @@ import {HomeStackParamList} from '../MainScreen';
 import {RootState, useAppDispatch} from '../../store';
 import {fetchFeed} from '../../slices/feed';
 import {FEED_ITEMS_SOURCE, FEED_PAGE_LIMIT} from '../../constants/feed';
-import {FlatList, StyleSheet} from 'react-native';
+import {FlatList, RefreshControl, StyleSheet} from 'react-native';
 import {SPACE_8} from '../../constants/dimens';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {IFeedItem} from '../../interfaces/feed';
@@ -27,11 +27,23 @@ const HomeScreen: React.FC<HomeScreenProps> = ({navigation}) => {
   const {data, isLoading} = useSelector((state: RootState) => state.feed);
   const dispatch = useAppDispatch();
   const insets = useSafeAreaInsets();
+  const [refreshing, setRefreshing] = useState(false);
+
+  const fetchFirstPage = async () => {
+    const dataSources = FEED_ITEMS_SOURCE.slice(0, FEED_PAGE_LIMIT);
+    await dispatch(fetchFeed({page: 1, dataSources}));
+  };
 
   useEffect(() => {
-    const dataSources = FEED_ITEMS_SOURCE.slice(0, FEED_PAGE_LIMIT);
-    dispatch(fetchFeed({page: 1, dataSources}));
-  }, [dispatch]);
+    fetchFirstPage();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const handleRefresh = async () => {
+    setRefreshing(true);
+    await fetchFirstPage();
+    setRefreshing(false);
+  };
 
   const handleEndReached = () => {
     const feedItemsCount = data?.length ?? 0;
@@ -69,6 +81,10 @@ const HomeScreen: React.FC<HomeScreenProps> = ({navigation}) => {
     );
   };
 
+  const renderRefreshControl = () => {
+    return <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />;
+  };
+
   if (!data && isLoading) {
     return <Loader />;
   }
@@ -83,6 +99,7 @@ const HomeScreen: React.FC<HomeScreenProps> = ({navigation}) => {
         onEndReached={handleEndReached}
         contentContainerStyle={contentStyle}
         showsVerticalScrollIndicator={false}
+        refreshControl={renderRefreshControl()}
       />
     </ScreenWrapper>
   );
