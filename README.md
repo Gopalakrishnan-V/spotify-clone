@@ -23,9 +23,8 @@ To run this project, you will need to add the following environment variables to
 * Assign the value created from previous step to `BASE_64_CLIENT_ID_SECRET` in .env file
 
 ## Demo
-<img src="https://i.ibb.co/SQqvdNn/1.png" width=300/>
-<img src="https://i.ibb.co/3r0Q1Zp/2.png" width=300/>
-<img src="https://i.ibb.co/MPv7C57/4.png" width=300/>
-<img src="https://i.ibb.co/BL5NDJ5/5.png" width=300/>
-<img src="https://i.ibb.co/gJNmj12/6.png" width=300/>
-<img src="https://i.ibb.co/HdSqw43/7.png" width=300/>
+<img src="https://i.ibb.co/GsvNbw6/Simulator-Screenshot-i-Phone-15-Pro-2024-06-23-at-13-08-17.png" width=300/>
+<img src="https://i.ibb.co/gmhP8dK/Simulator-Screenshot-i-Phone-15-Pro-2024-06-23-at-13-10-08.png" width=300/>
+<img src="https://i.ibb.co/SRXGTdJ/Simulator-Screenshot-i-Phone-15-Pro-2024-06-23-at-13-11-27.png" width=300/>
+<img src="https://i.ibb.co/YjCvG3G/Simulator-Screenshot-i-Phone-15-Pro-2024-06-23-at-13-11-53.png" width=300/>
+<img src="https://i.ibb.co/cN8yj47/Simulator-Screenshot-i-Phone-15-Pro-2024-06-23-at-13-12-42.png" width=300/>
